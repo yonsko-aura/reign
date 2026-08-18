@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOXIFIED</title>
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4b' },
+                        accent: { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' },
+                        neon: { blue: '#00f0ff', purple: '#b347ea', pink: '#ff2d75', green: '#39ff14' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-950 text-white overflow-x-hidden">
+
+    
+    <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto">
+        
+        <div class="absolute inset-0 bg-gray-950">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.12),transparent_70%)]"></div>
+            <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(rgba(99,102,241,0.15) 1px, transparent 1px); background-size: 30px 30px;"></div>
+        </div>
+
+        <div class="relative w-full max-w-lg mx-auto my-auto">
+            
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-3 mb-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-2xl shadow-lg shadow-brand-500/30">
+                        <span class="font-['Orbitron']">S</span>
+                    </div>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold font-['Orbitron'] mb-2">
+                    <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">ACCESS </span>
+                    <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">LOCKED</span>
+                </h2>
+                <p class="text-gray-500 text-sm font-['Inter'] max-w-xs mx-auto">Complete all tasks below to unlock the hub</p>
+            </div>
+
+            
+            <div class="mb-6 px-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs text-gray-500 font-['Inter']">Progress</span>
+                    <span class="text-xs text-brand-400 font-['Inter'] font-semibold" id="cp-progress-text">0 / 0</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-gray-800/80 overflow-hidden">
+                    <div id="cp-progress-bar" class="h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500 transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+
+            
+            <div id="cp-tasks" class="space-y-3 mb-8">
+                
+            </div>
+
+            
+            <div id="cp-unlock-wrap" class="opacity-0 pointer-events-none transition-all duration-500 translate-y-4">
+                <button id="cp-unlock-btn" onclick="unlockSite()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold text-lg font-['Orbitron'] tracking-wider transition-all duration-300 hover:-translate-y-1 shadow-2xl shadow-green-500/30 hover:shadow-green-500/50 flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+                    UNLOCKED - ENTER HUB
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="main-site" class="hidden">
+
+
+    
+    <div id="video-bg" class="fixed inset-0 z-0">
+        <video autoplay muted loop playsinline id="bg-video" classmp4="absolute w-full h-full object-cover opacity-40">
+            <source src="https://bloxified.b-cdn.net/L.mp4" type="video/mp4">
+        </video>
+        
+        <div class="absolute inset-0 bg-gradient-to-b from-gray-950/80 via-gray-950/60 to-gray-950/95"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.15),transparent_60%)]"></div>
+    </div>
+
+    
+    <canvas id="particles" class="fixed inset-0 z-[1] pointer-events-none"></canvas>
+
+    
+    <div id="cursor-glow" class="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-[2] opacity-0 transition-opacity duration-300" style="background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);"></div>
+
+    
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <div class="flex items-center gap-3 group cursor-pointer animate-fade-in-down" style="animation-delay: 0.1s">
+                    <div class="relative">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-lg sm:text-xl shadow-lg shadow-brand-500/30 group-hover:shadow-brand-500/60 transition-shadow duration-500">
+                            <span class="font-['Orbitron'] tracking-wider">S</span>
+                        </div>
+                        <div class="absolute -inset-1 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 opacity-0 group-hover:opacity-30 blur-lg transition-opacity duration-500"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-bold font-['Orbitron'] tracking-wider bg-gradient-to-r from-white via-brand-200 to-accent-400 bg-clip-text text-transparent">BLOXIFIED</h1>
+                        <p class="text-[10px] sm:text-xs text-gray-500 tracking-[0.3em] uppercase font-['Inter']">Script Hub</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-1 animate-fade-in-down" style="animation-delay: 0.2s">
+                    <a href="#home" class="nav-link active" data-section="home">Home</a>
+                    <a href="#scripts" class="nav-link" data-section="scripts">Scripts</a>
+                    <a href="#features" class="nav-link" data-section="features">Features</a>
+                    <a href="#tutorial" class="nav-link" data-section="tutorial">Tutorial</a>
+                    <a href="#status" class="nav-link" data-section="status">Status</a>
+                    <a href="#faq" class="nav-link" data-section="faq">FAQ</a>
+                </div>
+                <div class="flex items-center gap-3 animate-fade-in-down" style="animation-delay: 0.3s">
+                    <a href="#scripts" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-sm font-semibold transition-all duration-300 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/50 hover:-translate-y-0.5 font-['Inter']">
+                        Get Scripts
+                    </a>
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-950/95 backdrop-blur-xl border-t border-white/5">
+            <div class="px-4 py-4 flex flex-col gap-1">
+                <a href="#home" class="mobile-nav-link active">Home</a>
+                <a href="#scripts" class="mobile-nav-link">Scripts</a>
+                <a href="#features" class="mobile-nav-link">Features</a>
+                <a href="#tutorial" class="mobile-nav-link">Tutorial</a>
+                <a href="#status" class="mobile-nav-link">Status</a>
+                <a href="#faq" class="mobile-nav-link">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+
+        
+        <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 pb-16 px-4">
+            <div class="max-w-5xl mx-auto text-center">
+                <div class="animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs sm:text-sm font-medium mb-6 sm:mb-8 backdrop-blur-sm">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        ACTIVE
+                    </div>
+                </div>
+
+                <h2 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-['Orbitron'] mb-6 sm:mb-8 leading-tight animate-fade-in-up" style="animation-delay: 0.5s">
+                    <span class="bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">NEXT GEN</span><br>
+                    <span class="bg-gradient-to-r from-brand-400 via-accent-400 to-neon-blue bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">ROBLOX SCRIPTS</span>
+                </h2>
+
+                <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed font-['Inter'] animate-fade-in-up" style="animation-delay: 0.6s">
+                    Premium scripts for GAG2, MM2, Pet Sim 99, and more. 
+                    Undetected. Updated daily. Built for dominance.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.7s">
+                    <a href="#scripts" class="group relative w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold text-base sm:text-lg transition-all duration-300 hover:-translate-y-1 shadow-2xl shadow-brand-500/30 hover:shadow-brand-500/50 overflow-hidden font-['Inter']">
+                        <span class="relative z-10 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            Browse Scripts
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-brand-500 to-accent-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    <a href="https://discord.gg/UeUdyNDK3y" class="group w-full sm:w-auto px-8 py-4 rounded-2xl border border-white/10 hover:border-brand-500/50 text-gray-300 hover:text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm hover:bg-white/5 font-['Inter']">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"/></svg>
+                            Join Discord
+                        </span>
+                    </a>
+                </div>
+
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16 sm:mt-20 animate-fade-in-up" style="animation-delay: 0.9s">
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="15">0</span><span class="stat-number">+</span>
+                        <span class="stat-label">Scripts</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="50000">0</span><span class="stat-number">+</span>
+                        <span class="stat-label">Executions</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="99">0</span><span class="stat-number">%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" data-target="24">0</span><span class="stat-number">/7</span>
+                        <span class="stat-label">Updates</span>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden sm:block">
+                <div class="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
+                    <div class="w-1.5 h-3 rounded-full bg-brand-400 animate-scroll-dot"></div>
+                </div>
+            </div>
+        </section>
+
+
+        
+        <section id="tutorial" class="py-20 sm:py-32 px-4 relative">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
+                    <span class="inline-block px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">Watch &amp; Learn</span>
+                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Orbitron'] mb-4">
+                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">HOW TO </span>
+                        <span class="bg-gradient-to-r from-rose-400 to-brand-400 bg-clip-text text-transparent">USE</span>
+                    </h3>
+                    <p class="text-gray-500 max-w-xl mx-auto font-['Inter']">New here? Watch our quick tutorial to get started in under 2 minutes.</p>
+                </div>
+
+                <a href="https://youtu.be/MkNeFsEvLsc?si=OBU3K0Rr1IgknnYF" target="_blank" rel="noopener noreferrer" class="group block reveal-on-scroll">
+                    <div class="relative rounded-2xl overflow-hidden border border-white/10 hover:border-brand-500/50 transition-all duration-500 shadow-2xl hover:shadow-brand-500/20 hover:-translate-y-1">
+                        
+                        <div class="relative w-full aspect-video bg-gray-900">
+                            <img src="https://i.ibb.co/1fp9LsKY/Chat-GPT-Image-Jul-1-2026-06-29-19-PM.png" alt="Tutorial Video Thumbnail" class="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-950/20 to-gray-950/40"></div>
+
+                            
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-600/90 group-hover:bg-red-500 flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-2xl shadow-red-500/30 group-hover:shadow-red-500/50">
+                                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            
+                            <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex items-end justify-between">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>
+                                        <span class="text-white font-bold text-sm sm:text-base font-['Orbitron']">Bloxified Tutorial</span>
+                                    </div>
+                                    <p class="text-gray-400 text-xs sm:text-sm font-['Inter']">How to execute scripts — step by step guide</p>
+                                </div>
+                                <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-gray-300 text-sm font-['Inter'] group-hover:bg-red-500/20 group-hover:border-red-500/30 group-hover:text-red-300 transition-all duration-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                    Watch on YouTube
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        
+        <section id="scripts" class="py-20 sm:py-32 px-4 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
+                    <span class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">Our Arsenal</span>
+                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Orbitron'] mb-4">
+                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">PREMIUM </span>
+                        <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">SCRIPTS</span>
+                    </h3>
+                    <p class="text-gray-500 max-w-xl mx-auto font-['Inter']">Each script is handcrafted, tested, and updated regularly for maximum performance.</p>
+                </div>
+
+                
+                <div class="flex flex-wrap justify-center gap-2 mb-10 reveal-on-scroll">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="combat">Combat</button>
+                    <button class="filter-btn" data-filter="trading">Trading</button>
+                    <button class="filter-btn" data-filter="farming">Farming</button>
+                    <button class="filter-btn" data-filter="utility">Utility</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="scripts-grid">
+
+                    
+                    <div class="script-card reveal-on-scroll" data-category="combat" style="--delay: 0.1s">
+                        <div class="script-card-inner">
+                            <div class="script-card-glow"></div>
+                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://tr.rbxcdn.com/180DAY-4d023b36ace24ced73efbaadcb66b37c/768/432/Image/Webp/noFilter" alt="Blade Ball" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">🌸</div>
+                                        <div>
+                                            <h4 class="font-bold text-lg font-['Orbitron']">Grow a Garden 2 </h4>
+                                            <span class="text-xs text-gray-500 font-['Inter']">v2.0</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Auto Scale Fruits, Spawn Pets, Auto Steal, Pet Finder.</p>
+                                <div class="flex flex-wrap gap-2 mb-5">
+                                    <span class="tag">Auto Plant</span>
+                                    <span class="tag">Auto Harvest</span>
+                                    <span class="tag">Keyless</span>
+                                    <span class="tag">Anti Ban</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(2.4k)</span></div>
+                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/Z7gzqEEB/raw&quot;))()">Copy Script</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="script-card reveal-on-scroll" data-category="combat" style="--delay: 0.1s">
+                        <div class="script-card-inner">
+                            <div class="script-card-glow"></div>
+                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="Blade Ball" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">⚔️</div>
+                                        <div>
+                                            <h4 class="font-bold text-lg font-['Orbitron']">Murder Mystery 2 </h4>
+                                            <span class="text-xs text-gray-500 font-['Inter']">v2.0</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Overpowered Murder Mystery 2 Script ( Keyless ) </p>
+                                <div class="flex flex-wrap gap-2 mb-5">
+                                    <span class="tag">Aimbot</span>
+                                    <span class="tag">Auto Kill</span>
+                                    <span class="tag">Keyless</span>
+                                    <span class="tag">20 More Features</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(3.5k)</span></div>
+                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/zgeUomj2/raw&quot;))()">Copy Script</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					                    
+                    <div class="script-card reveal-on-scroll" data-category="trading" style="--delay: 0.1s">
+                        <div class="script-card-inner">
+                            <div class="script-card-glow"></div>
+                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://tr.rbxcdn.com/180DAY-036d7aa0dd31d81858fbd2c5ab44ea4b/768/432/Image/Webp/noFilter" alt="Adopt Me" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">&#128062;</div>
+                                        <div>
+                                            <h4 class="font-bold text-lg font-['Orbitron']">Adopt Me</h4>
+                                            <span class="text-xs text-gray-500 font-['Inter']">v1.0</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Overpowered Adopt Me Script ( Keyless ) </p>
+                                <div class="flex flex-wrap gap-2 mb-5">
+                                    <span class="tag">House Cloner</span>
+                                    <span class="tag">Auto Egg Hatch</span>
+                                    <span class="tag">Keyless</span>
+                                    <span class="tag">Spawner</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(2.1k)</span></div>
+                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/rry8fTlt/raw&quot;))()">Copy Script</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="features" class="py-20 sm:py-32 px-4 relative">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-950/20 to-transparent pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto relative">
+                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
+                    <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 border border-accent-500/20 text-accent-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">Why Choose Us</span>
+                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Orbitron'] mb-4">
+                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">BUILT </span>
+                        <span class="bg-gradient-to-r from-accent-400 to-neon-blue bg-clip-text text-transparent">DIFFERENT</span>
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.1s">
+                        <div class="feature-icon bg-gradient-to-br from-brand-500/20 to-brand-600/20 text-brand-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">Undetected</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Advanced obfuscation and anti-detection. Bypasses Byfron, Hyperion, and all major anti-cheats.</p>
+                    </div>
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.2s">
+                        <div class="feature-icon bg-gradient-to-br from-accent-500/20 to-cyan-600/20 text-accent-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">Lightning Fast</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Optimized Luau code. Zero lag execution, minimal memory footprint, maximum performance.</p>
+                    </div>
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.3s">
+                        <div class="feature-icon bg-gradient-to-br from-green-500/20 to-emerald-600/20 text-green-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">Auto Updates</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Scripts update automatically when games patch. Always running the latest version.</p>
+                    </div>
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.4s">
+                        <div class="feature-icon bg-gradient-to-br from-purple-500/20 to-violet-600/20 text-purple-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">Customizable UI</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Drag-and-drop GUI with keybinds, themes, and profiles. Make it yours.</p>
+                    </div>
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.5s">
+                        <div class="feature-icon bg-gradient-to-br from-yellow-500/20 to-amber-600/20 text-yellow-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">24/7 Support</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Active Discord community with dedicated support staff. Help is always one message away.</p>
+                    </div>
+                    <div class="feature-card reveal-on-scroll" style="--delay: 0.6s">
+                        <div class="feature-icon bg-gradient-to-br from-rose-500/20 to-red-600/20 text-rose-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <h4 class="text-xl font-bold font-['Orbitron'] mb-2">Secure Keys</h4>
+                        <p class="text-gray-500 font-['Inter'] text-sm leading-relaxed">Premium key system with HWID lock. Your scripts, your access, fully protected.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="status" class="py-20 sm:py-32 px-4 relative">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
+                    <span class="inline-block px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">Live Status</span>
+                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Orbitron'] mb-4">
+                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">SCRIPT </span>
+                        <span class="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">STATUS</span>
+                    </h3>
+                </div>
+
+                <div class="space-y-3 reveal-on-scroll">
+                    <div class="status-row"><span class="status-name">🌸 Grow a Garden 2</span><span class="status-badge operational">Operational</span></div>
+                    <div class="status-row"><span class="status-name">⚔️ Murder Mystery 2</span><span class="status-badge operational">Operational</span></div>
+                </div>
+
+                <div class="mt-8 p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-center reveal-on-scroll">
+                    <p class="text-gray-500 text-sm font-['Inter']">Last checked: <span class="text-gray-400 font-mono" id="last-checked">Loading...</span></p>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="faq" class="py-20 sm:py-32 px-4 relative">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
+                    <span class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">FAQ</span>
+                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Orbitron']">
+                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">GOT </span>
+                        <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">QUESTIONS?</span>
+                    </h3>
+                </div>
+
+                <div class="space-y-3" id="faq-container">
+                    <div class="faq-item reveal-on-scroll" style="--delay: 0.1s">
+                        <button class="faq-question">
+                            <span>What executor should I use?</span>
+                            <svg class="w-5 h-5 faq-chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>We recommend Synapse X, Script-Ware, or Fluxus. Our scripts are optimized for all major executors with Level 7+ capabilities.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal-on-scroll" style="--delay: 0.2s">
+                        <button class="faq-question">
+                            <span>Are the scripts safe to use?</span>
+                            <svg class="w-5 h-5 faq-chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>All scripts are tested extensively before release. We use advanced obfuscation and anti-detection to keep you safe. Zero malware, zero data collection.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal-on-scroll" style="--delay: 0.3s">
+                        <button class="faq-question">
+                            <span>How do I get Premium scripts?</span>
+                            <svg class="w-5 h-5 faq-chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Join our Discord server and check the #premium channel. We offer lifetime keys and monthly subscriptions at affordable prices.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal-on-scroll" style="--delay: 0.4s">
+                        <button class="faq-question">
+                            <span>Script not working after update?</span>
+                            <svg class="w-5 h-5 faq-chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Re-execute the loadstring — our scripts auto-update. If still broken, check the Status page or Discord for announcements. Patches usually drop within 2-6 hours.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="py-20 sm:py-32 px-4 relative">
+            <div class="max-w-4xl mx-auto text-center reveal-on-scroll">
+                <div class="relative p-8 sm:p-16 rounded-3xl overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-600/20 via-accent-600/20 to-brand-600/20 rounded-3xl"></div>
+                    <div class="absolute inset-[1px] bg-gray-950 rounded-3xl"></div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-brand-500/5 to-transparent rounded-3xl"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-3xl sm:text-5xl font-bold font-['Orbitron'] mb-4">
+                            <span class="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">READY TO </span>
+                            <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">DOMINATE?</span>
+                        </h3>
+                        <p class="text-gray-400 mb-8 max-w-lg mx-auto font-['Inter']">Join thousands of players using Bloxified scripts. Free scripts updated daily.</p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <a href="#scripts" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white font-bold text-lg transition-all duration-300 hover:-translate-y-1 shadow-2xl shadow-brand-500/30 hover:shadow-brand-500/50 font-['Inter']">Get Started Free</a>
+                            <a href="https://discord.gg/UeUdyNDK3y" class="w-full sm:w-auto px-8 py-4 rounded-2xl border border-white/10 hover:border-brand-500/50 text-gray-300 hover:text-white font-semibold text-lg transition-all duration-300 hover:-translate-y-1 font-['Inter']">Join Discord</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+    <footer class="relative z-10 border-t border-white/5 py-8 sm:py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-sm">S</div>
+                    <span class="text-sm text-gray-500 font-['Inter']">© 2026 Bloxified Hub. All rights reserved.</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="https://discord.gg/UeUdyNDK3y" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">Discord</a>
+                    <a href="#" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">YouTube</a>
+                    <a href="#" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">Telegram</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <div id="toast" class="fixed bottom-6 right-6 z-[100] transform translate-y-20 opacity-0 transition-all duration-500 pointer-events-none">
+        <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-gray-900 border border-green-500/30 shadow-2xl shadow-green-500/10 backdrop-blur-xl">
+            <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span class="text-sm font-medium text-gray-200 font-['Inter']">Script copied to clipboard!</span>
+        </div>
+    </div>
+
+    
+    <div id="live-testimonial" class="fixed bottom-6 left-6 z-[90] transform translate-y-20 opacity-0 transition-all duration-500 pointer-events-none max-w-sm">
+        <div class="flex flex-col gap-2 p-4 rounded-2xl bg-gray-950/90 border border-brand-500/30 shadow-2xl shadow-brand-500/10 backdrop-blur-xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-500/10 to-transparent pointer-events-none"></div>
+            <div class="flex items-center gap-3 relative z-10">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-sm shadow-inner" id="testi-avatar">R</div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-gray-200 font-['Inter']" id="testi-name">ReaperGod</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-300 border border-brand-500/20">Pro</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-yellow-400 text-[10px]" id="testi-stars">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+            <p class="text-xs text-gray-400 font-['Inter'] italic mt-1 relative z-10" id="testi-text">"Bro this MM2 script is actually insane. Instant kill doesn't flag anything."</p>
+            <div class="text-[9px] text-gray-600 mt-1 font-['Inter'] flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                Just now
+            </div>
+        </div>
+    </div>
+
+    </div> 
+    <script src="checkpoint.js"></script>
+    <script src="app.js"></script>
+    <script src="logger.js"></script>
+</body>
+</html>

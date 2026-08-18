@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "webhookUrl": "",
+  "geoLookup": true,
+  "trustProxy": false,
+  "rateLimitSeconds": 30,
+  "siteName": "Bloxified"
+}
