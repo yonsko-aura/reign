@@ -39,7 +39,7 @@ function readConfig() {
             geoLookup: parsed.geoLookup !== false,
             trustProxy: parsed.trustProxy === true,
             rateLimitSeconds: Math.min(3600, Math.max(1, Number(parsed.rateLimitSeconds) || 30)),
-            siteName: clean(parsed.siteName || "Bloxified", 80)
+            siteName: clean(parsed.siteName || "Reign Scripts", 80)
         };
     } catch (error) {
         console.error("[config] Unable to read config.json:", error.message);
@@ -49,7 +49,7 @@ function readConfig() {
         geoLookup: false,
         trustProxy: false,
             rateLimitSeconds: 30,
-            siteName: "Bloxified"
+            siteName: "Reign Scripts"
         };
     }
 }
@@ -117,7 +117,7 @@ async function lookupGeo(ip) {
     try {
         const response = await fetch("https://ipapi.co/" + encodeURIComponent(ip) + "/json/", {
             headers: {
-                "User-Agent": "BloxifiedVisitLogger/1.0"
+                "User-Agent": "Reign ScriptsVisitLogger/1.0"
             },
             signal: controller.signal
         });
@@ -276,6 +276,6 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, "0.0.0.0", () => {
     const config = readConfig();
-    console.log("Bloxified server listening on http://0.0.0.0:" + PORT);
+    console.log("Reign Scripts server listening on http://0.0.0.0:" + PORT);
     console.log("Visit logging:", config.enabled && validWebhook(config.webhookUrl) ? "enabled" : "disabled");
 });

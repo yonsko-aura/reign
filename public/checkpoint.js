@@ -1,11 +1,11 @@
 const CHECKPOINT_TASKS = [ {
     type: "subscribe",
-    label: "Subscribe to Bloxified",
-    url: "https://www.youtube.com/@bloxifiedscripts"
+    label: "Subscribe to Reign Scripts",
+    url: "https://www.youtube.com/@reignscripts"
 }, {
-    type: "Follow",
-    label: "Follow Bloxifieds TikTok",
-    url: "https://www.tiktok.com/@bloxified_s?_r=1&_t=ZS-98M8juwGLUQ"
+    type: "like",
+    label: "Like the Video",
+    url: "https://youtu.be/MkNeFsEvLsc?si=OBU3K0Rr1IgknnYF"
 } ];
 
 const COOLDOWN_MS = 1e4;
@@ -16,7 +16,7 @@ const taskState = CHECKPOINT_TASKS.map(() => ({
 }));
 
 function getIcon(type) {
-    if (type === "subscribe") {
+    if (type === "subscribe" || type === "like") {
         return `<svg class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">\n            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/>\n        </svg>`;
     }
     return `<svg class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>\n    </svg>`;
@@ -52,7 +52,7 @@ function renderTasks() {
         html += state.done ? "text-green-400" : "text-gray-200";
         html += '">' + task.label + "</h4>";
         html += "<p class=\"text-[11px] sm:text-xs text-gray-600 font-['Inter'] mt-0.5\">";
-        html += task.type === "subscribe" ? "YouTube Channel" : "Tiktok Account";
+        html += task.type === "subscribe" ? "YouTube Channel" : "YouTube Video";
         html += "</p>";
         html += "</div>";
         if (state.done) {
@@ -75,7 +75,7 @@ function renderTasks() {
             html += "</div>";
         } else {
             html += '<button onclick="startTask(' + i + ")\" class=\"w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold font-['Inter'] flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ";
-            if (task.type === "subscribe") {
+            if (task.type === "subscribe" || task.type === "like") {
                 html += 'from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40">';
             } else {
                 html += 'from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">';
