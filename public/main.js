@@ -70,6 +70,41 @@
             item.classList.toggle('open');
         });
     });
+    // Clean URL Routing
+    const validRoutes = ['scripts', 'features', 'tutorial', 'status', 'faq'];
+    
+    // Intercept clicks on links starting with /
+    document.querySelectorAll('a[href^="/"]').forEach(anchor => {
+        anchor.addEventListener("click", e => {
+            const path = anchor.getAttribute('href');
+            // If it's a known route or home
+            const route = path.substring(1);
+            if (path === '/' || validRoutes.includes(route)) {
+                e.preventDefault();
+                history.pushState(null, null, path);
+                
+                if (path === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const target = document.getElementById(route);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        });
+    });
+
+    // Handle initial load
+    setTimeout(() => {
+        const initialRoute = window.location.pathname.substring(1);
+        if (validRoutes.includes(initialRoute)) {
+            const target = document.getElementById(initialRoute);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, 100);
 
     // Navbar highlighting logic
     const sections = document.querySelectorAll('section[id], .hero');
@@ -82,9 +117,9 @@
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     let href = link.getAttribute('href');
-                    if (id && href === '#' + id) {
+                    if (id && href === '/' + id) {
                         link.classList.add('active');
-                    } else if (!id && href === '#') {
+                    } else if (!id && href === '/') {
                         // The .hero section corresponds to "Home" (#)
                         link.classList.add('active');
                     }

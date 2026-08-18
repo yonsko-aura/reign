@@ -1,36 +1,58 @@
 ﻿{
-  "version": 2,
-  "crons": [
-    {
-      "path": "/api/cron",
-      "schedule": "1 0 * * *"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self';"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        }
-      ]
-    }
-  ]
+    "version":  2,
+    "crons":  [
+                  {
+                      "path":  "/api/cron",
+                      "schedule":  "1 0 * * *"
+                  }
+              ],
+    "headers":  [
+                    {
+                        "source":  "/(.*)",
+                        "headers":  [
+                                        {
+                                            "key":  "Content-Security-Policy",
+                                            "value":  "default-src \u0027self\u0027; script-src \u0027self\u0027; style-src \u0027self\u0027 \u0027unsafe-inline\u0027; img-src \u0027self\u0027 data: https:; font-src \u0027self\u0027; connect-src \u0027self\u0027; frame-ancestors \u0027none\u0027; base-uri \u0027none\u0027; form-action \u0027self\u0027;"
+                                        },
+                                        {
+                                            "key":  "X-Content-Type-Options",
+                                            "value":  "nosniff"
+                                        },
+                                        {
+                                            "key":  "Referrer-Policy",
+                                            "value":  "strict-origin-when-cross-origin"
+                                        },
+                                        {
+                                            "key":  "Permissions-Policy",
+                                            "value":  "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+                                        },
+                                        {
+                                            "key":  "X-Frame-Options",
+                                            "value":  "DENY"
+                                        }
+                                    ]
+                    }
+                ],
+    "rewrites":  [
+                     {
+                         "destination":  "/",
+                         "source":  "/scripts"
+                     },
+                     {
+                         "destination":  "/",
+                         "source":  "/features"
+                     },
+                     {
+                         "destination":  "/",
+                         "source":  "/tutorial"
+                     },
+                     {
+                         "destination":  "/",
+                         "source":  "/status"
+                     },
+                     {
+                         "destination":  "/",
+                         "source":  "/faq"
+                     }
+                 ]
 }

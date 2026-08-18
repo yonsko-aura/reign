@@ -261,15 +261,7 @@
             card.style.transform = "translateY(0) perspective(1000px) rotateX(0) rotateY(0)";
         });
     });
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", e => {
-            e.preventDefault();
-            const target = document.querySelector(anchor.getAttribute("href"));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
+    
             }
         });
     });

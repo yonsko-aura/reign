@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Page Not Found | Reign Scripts</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="stylesheet" href="/tailwind.css">
+<style>
+  :root{
+    --bg: #0a0a0a;
+    --text: #ffffff;
+    --yellow: #f2c94c;
+  }
+  body{
+    margin:0; padding:0; background:var(--bg); color:var(--text);
+    font-family:'Inter', sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;
+  }
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 6rem;
+    margin: 0;
+    color: var(--yellow);
+    text-shadow: 0 0 20px rgba(242,201,76,0.3);
+  }
+  p {
+    font-size: 1.25rem;
+    color: #9ca3af;
+    margin-bottom: 2rem;
+  }
+  a.btn {
+    padding: 12px 32px;
+    background: var(--yellow);
+    color: #111;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 99px;
+    transition: transform 0.2s;
+  }
+  a.btn:hover {
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+  <h1>404</h1>
+  <p>Oops! The page you're looking for doesn't exist.</p>
+  <a href="/" class="btn">Return to Hub</a>
+</body>
+</html>
