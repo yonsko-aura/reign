@@ -14,18 +14,13 @@
             sessionStorage.setItem(storageKey, "1");
         } catch (_) {}
         
-        const payload = {
-            page: window.location.pathname || "/",
-            referrer: document.referrer || "Direct"
-        };
-        
         fetch("/api/visit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload)
-        }).catch(err => {
+            body: JSON.stringify({ event: "visit" })
+        }).catch(() => {
             // Silently swallow errors to prevent console spam
         });
     }
@@ -45,8 +40,8 @@
             banner.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #333;padding:16px;text-align:center;z-index:9999;font-family:sans-serif;font-size:13px;color:#ccc;";
             banner.innerHTML = `
                 <div style="max-width:800px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-                    <div style="text-align:left;flex:1;min-width:280px;">
-                        <strong>Privacy Notice:</strong> We use basic analytics to monitor site traffic. We log your IP (to prevent abuse) and referring page. We do not track your browser, device, or precise location.
+                    <div style="text-align:left;flex:1;min-width:280px;line-height:1.5;">
+                        <strong>Privacy Notice:</strong> Analytics starts only after opt-in. The site records an aggregate visit event. The site sends daily aggregate visit totals to a private Discord channel. The analytics feature does not send individual visitor IP addresses or device fingerprints to Discord. IPs are processed temporarily only for rate-limiting. <br><small>Anti-abuse hashes expire quickly. Aggregate counters are retained for historical totals.</small>
                     </div>
                     <div style="display:flex;gap:8px;">
                         <button id="consent-decline" style="background:transparent;border:1px solid #555;color:#ccc;padding:8px 16px;border-radius:6px;cursor:pointer;">Decline</button>
