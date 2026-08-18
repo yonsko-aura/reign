@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -33,7 +33,12 @@
     background: rgba(10,10,10,0.9);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line-soft);
+    transition: transform 0.3s ease-in-out;
   }
+  header.nav-hidden {
+    transform: translateY(-100%);
+  }
+
   .nav-inner{
     max-width: 1100px; margin: 0 auto;
     display:flex; align-items:center; justify-content:space-between;
@@ -42,10 +47,9 @@
   .brand{display:flex; align-items:center; gap:10px;}
   .brand-mark{
     width:34px; height:34px; border-radius:8px;
-    background: var(--yellow);
-    color:#111;
+    background: transparent;
     display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:16px;
+    overflow: hidden; padding: 0;
   }
   .brand-name{font-weight:700; font-size:15px; letter-spacing:0.02em;}
   .brand-sub{font-size:10px; color:var(--text-faint); letter-spacing:0.15em; text-transform:uppercase;}
@@ -126,72 +130,29 @@
   }
   .tab.active{ background: var(--yellow); color:#111; border-color:var(--yellow); font-weight:700; }
 
-  .card-grid{
-    display:grid; grid-template-columns: 1fr; gap:16px;
-  }
-  @media(min-width:700px){ .card-grid{ grid-template-columns: 1fr 1fr; } }
-  .card{
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    overflow:hidden;
-    transition: border-color .15s ease;
-  }
-  .card:hover{ border-color: var(--yellow-dim); }
-  .card-media{
-    height: 140px;
-    background: linear-gradient(135deg, #1a1a1a, #0e0e0e);
-    display:flex; align-items:center; justify-content:center;
-    color: var(--text-faint); font-size: 12px;
-    border-bottom: 1px solid var(--line);
-    position: relative;
-    overflow: hidden;
-  }
-  .card-media img{
-    width:100%; height:100%; object-fit:cover;
-  }
-  .media-tags{ z-index:1;
-    position:absolute; top:10px; left:10px; right:10px;
-    display:flex; justify-content:space-between; align-items:flex-start;
-  }
-  .media-badge{
-    font-size:10px; font-weight:800; padding:4px 8px; border-radius:5px;
-    background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
-    border:1px solid rgba(255,255,255,0.1);
-  }
-  .media-badge.free{ color: var(--green); border-color: rgba(124,184,122,0.4); }
-  .media-badge.ver{ color: var(--text-dim); }
-  .media-category{ z-index:1;
-    position:absolute; bottom:10px; left:10px;
-    font-size:11px; font-weight:600; padding:5px 10px; border-radius:6px;
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-    border:1px solid rgba(255,255,255,0.08);
-  }
-  .card-body{ padding: 16px 18px 18px; }
-  .card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
-  .card-title-row{ display:flex; align-items:center; gap:10px; }
-  .card-icon{
-    width:34px; height:34px; border-radius:8px;
-    background: var(--bg-raised); border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center; font-size:15px;
-    flex-shrink:0;
-  }
-  .card-title{ font-size:15px; font-weight:700; }
-  .card-version{ font-size:11px; color:var(--text-faint); }
-  .badge-free{
-    font-size:10px; font-weight:800; letter-spacing:0.05em;
-    color: var(--yellow); border:1px solid var(--yellow-dim);
-    padding: 3px 8px; border-radius:5px; white-space:nowrap;
-  }
-  .card-desc{ font-size:13px; color:var(--text-dim); margin: 12px 0 12px; }
-  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
-  .tag{
-    font-size:11px; color:var(--text-dim);
-    border:1px solid var(--line); padding:4px 9px; border-radius:6px;
-  }
-  .card-foot{ display:flex; align-items:center; justify-content:space-between; }
-  .rating{ font-size:12px; color:var(--text-faint); }
-  .rating b{ color: var(--yellow); }
+  /* Bloxified style cards */
+  .script-card { position: relative; }
+  .script-card-inner { background: #161616; border: 1px solid #262626; border-radius: 14px; overflow: hidden; position: relative; transition: all 0.3s ease; }
+  .script-card-inner:hover { border-color: #7a6420; transform: translateY(-4px); box-shadow: 0 10px 30px -10px rgba(242,201,76,0.15); }
+  .script-card-glow { position: absolute; top: 0; left: 0; right: 0; height: 100%; background: radial-gradient(circle at center, rgba(242,201,76,0.08) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1; }
+  .script-card-inner:hover .script-card-glow { opacity: 1; }
+  .script-image-wrap { height: 140px; width: 100%; background: #0a0a0a; position: relative; overflow: hidden; }
+  .script-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: transform 0.5s ease, opacity 0.5s ease; }
+  .script-card-inner:hover .script-image-wrap img { transform: scale(1.05); opacity: 0.9; }
+  .script-image-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #161616, transparent); z-index: 0; }
+  .script-card-content { padding: 20px; position: relative; z-index: 2; }
+  .script-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; margin-top: -36px; position: relative; z-index: 10; }
+  .script-icon-wrap { display: flex; align-items: center; gap: 12px; }
+  .script-icon { width: 44px; height: 44px; border-radius: 10px; background: #0a0a0a; border: 1px solid #262626; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  .script-title { font-weight: 700; font-size: 16px; color: #f2f2f0; }
+  .script-version { font-size: 11px; color: #6b6b66; }
+  .script-badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; background: rgba(124,184,122,0.1); border: 1px solid rgba(124,184,122,0.3); color: #7cb87a; }
+  .script-desc { color: #9a9a94; font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
+  .script-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .script-tag { font-size: 11px; color: #9a9a94; border: 1px solid #262626; padding: 4px 9px; border-radius: 6px; }
+  .script-footer { display: flex; align-items: center; justify-content: space-between; }
+  .script-rating { font-size: 12px; font-weight: 700; color: #f2c94c; display: flex; align-items: center; gap: 4px; }
+  .script-rating span { color: #6b6b66; font-weight: 400; }
 
   .feat-grid{
     display:grid; grid-template-columns: 1fr; gap:14px;
@@ -256,7 +217,12 @@
     text-align:center; padding: 24px; font-size:12px; color:var(--text-faint);
     border-top: 1px solid var(--line-soft);
   }
-.cp-spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #f59e0b; animation: cp-spin 1s ease-in-out infinite; } @keyframes cp-spin { to { transform: rotate(360deg); } }
+
+  .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+  .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+
+  .cp-spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #f2c94c; animation: cp-spin 1s ease-in-out infinite; } 
+  @keyframes cp-spin { to { transform: rotate(360deg); } }
 </style>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script>
@@ -266,8 +232,8 @@
         theme: {
             extend: {
                 colors: {
-                    brand: { 50:"#fffbeb",100:"#fef3c7",200:"#fde68a",300:"#fcd34d",400:"#fbbf24",500:"#f59e0b",600:"#d97706",700:"#b45309",800:"#92400e",900:"#78350f",950:"#451a03" },
-                    accent: { 400: "#fbbf24", 500: "#f59e0b", 600: "#d97706" }
+                    brand: { 50:"#fffbeb",100:"#fef3c7",200:"#fde68a",300:"#fcd34d",400:"#f2c94c",500:"#f2c94c",600:"#d97706",700:"#b45309",800:"#92400e",900:"#78350f",950:"#451a03" },
+                    accent: { 400: "#f2c94c", 500: "#f2c94c", 600: "#d97706" }
                 }
             }
         }
@@ -275,59 +241,54 @@
 </script>
 </head>
 <body>
+
     <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto">
-        
-        <div class="absolute inset-0 bg-gray-950">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.12),transparent_70%)]"></div>
-            <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(rgba(245,158,11,0.15) 1px, transparent 1px); background-size: 30px 30px;"></div>
+        <div class="absolute inset-0 bg-[#0a0a0a]">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(242,201,76,0.08),transparent_70%)]"></div>
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(rgba(242,201,76,0.1) 1px, transparent 1px); background-size: 30px 30px;"></div>
         </div>
 
         <div class="relative w-full max-w-lg mx-auto my-auto">
-            
             <div class="text-center mb-8">
                 <div class="inline-flex items-center gap-3 mb-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-2xl shadow-lg shadow-brand-500/30">
-                        <span class="font-['Inter']">R</span>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden bg-transparent">
+                        <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover">
                     </div>
                 </div>
-                <h2 class="text-2xl sm:text-3xl font-bold font-['Inter'] mb-2">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">
                     <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">ACCESS </span>
                     <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">LOCKED</span>
                 </h2>
-                <p class="text-gray-500 text-sm font-['Inter'] max-w-xs mx-auto">Complete all tasks below to unlock the hub</p>
+                <p class="text-gray-500 text-sm max-w-xs mx-auto">Complete all tasks below to unlock the hub</p>
             </div>
 
-            
             <div class="mb-6 px-1">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-gray-500 font-['Inter']">Progress</span>
-                    <span class="text-xs text-brand-400 font-['Inter'] font-semibold" id="cp-progress-text">0 / 0</span>
+                    <span class="text-xs text-gray-500">Progress</span>
+                    <span class="text-xs text-brand-400 font-semibold" id="cp-progress-text">0 / 0</span>
                 </div>
                 <div class="w-full h-2 rounded-full bg-gray-800/80 overflow-hidden">
                     <div id="cp-progress-bar" class="h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500 transition-all duration-700 ease-out" style="width: 0%"></div>
                 </div>
             </div>
 
-            
-            <div id="cp-tasks" class="space-y-3 mb-8">
-                
-            </div>
+            <div id="cp-tasks" class="space-y-3 mb-8"></div>
 
-            
             <div id="cp-unlock-wrap" class="opacity-0 pointer-events-none transition-all duration-500 translate-y-4">
-                <button id="cp-unlock-btn" onclick="unlockSite()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold text-lg font-['Inter'] tracking-wider transition-all duration-300 hover:-translate-y-1 shadow-2xl shadow-green-500/30 hover:shadow-green-500/50 flex items-center justify-center gap-3">
+                <button id="cp-unlock-btn" onclick="unlockSite()" class="w-full py-4 rounded-2xl bg-[#7cb87a] hover:bg-[#6aa468] text-[#111] font-bold text-lg tracking-wider transition-all duration-300 hover:-translate-y-1 shadow-2xl flex items-center justify-center gap-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
                     UNLOCKED - ENTER HUB
                 </button>
             </div>
         </div>
     </div>
+
 <div id="main-site" class="hidden">
 
 <header>
   <div class="nav-inner">
     <div class="brand">
-      <div class="brand-mark" style="background:transparent; overflow:hidden; padding:0;">
+      <div class="brand-mark">
         <img src="logo.jpg" alt="Reign Scripts Logo" style="width:100%; height:100%; object-fit:cover;">
       </div>
       <div>
@@ -347,7 +308,7 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero reveal-on-scroll">
   <div class="pill"><span class="pill-dot"></span> Active</div>
   <h1 class="display">Next gen<br><span class="accent">Roblox scripts</span></h1>
   <p class="lede">Premium scripts for GAG2, MM2, Pet Sim 99, and more. Undetected. Updated daily. Built for dominance.</p>
@@ -364,13 +325,13 @@
 </section>
 
 <section class="section" id="scripts">
-  <div class="section-head">
+  <div class="section-head reveal-on-scroll">
     <div class="eyebrow">Our Arsenal</div>
     <h2 class="section-title">Premium scripts</h2>
     <p class="section-desc">Each script is handcrafted, tested, and updated regularly for maximum performance.</p>
   </div>
 
-  <div class="tabs">
+  <div class="tabs reveal-on-scroll">
     <div class="tab active">All</div>
     <div class="tab">Combat</div>
     <div class="tab">Trading</div>
@@ -378,81 +339,82 @@
     <div class="tab">Utility</div>
   </div>
 
-  <div class="card-grid">
-    <div class="card">
-      <div class="card-media"><img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0.6;">
-        <div class="media-tags">
-          <span class="media-badge free">FREE</span>
-          <span class="media-badge ver">v3.5</span>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+    
+    <div class="script-card reveal-on-scroll">
+      <div class="script-card-inner">
+        <div class="script-card-glow"></div>
+        <div class="script-image-wrap">
+          <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2">
+          <div class="script-image-overlay"></div>
         </div>
-        <span class="media-category">Mystery</span>
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-title-row">
-            <div class="card-icon">🗡️</div>
-            <div>
-              <div class="card-title">Overdrive Hub</div>
-              <div class="card-version">Premium · Keyless</div>
+        <div class="script-card-content">
+          <div class="script-header">
+            <div class="script-icon-wrap">
+              <div class="script-icon">🗡️</div>
+              <div>
+                <div class="script-title">Overdrive Hub</div>
+                <div class="script-version">Premium · Keyless</div>
+              </div>
             </div>
+            <div class="script-badge">FREE</div>
           </div>
-          <div class="badge-free">FREE</div>
-        </div>
-        <p class="card-desc">A social deduction thriller script with maps, modes, and a full knife economy.</p>
-        <div class="tag-row">
-          <span class="tag">Auto Farm</span>
-          <span class="tag">Aimbot</span>
-          <span class="tag">ESP</span>
-          <span class="tag">Kill All</span>
-          <span class="tag">20+ more...</span>
-        </div>
-        <div class="card-foot">
-          <div class="rating"><b>★★★★★</b> 4.8 · 3,892 reviews</div>
-          <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet(`"https://pastefy.app/Z7gzqEEB/raw`"))()">Copy Script</button>
+          <p class="script-desc">Overpowered Murder Mystery 2 Script (Keyless). Features include maps, modes, and knife economy.</p>
+          <div class="script-tags">
+            <span class="script-tag">Aimbot</span>
+            <span class="script-tag">ESP</span>
+            <span class="script-tag">Kill All</span>
+            <span class="script-tag">20+ more...</span>
+          </div>
+          <div class="script-footer">
+            <div class="script-rating">★★★★★ <span>(3.8k)</span></div>
+            <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet("https://pastefy.app/Z7gzqEEB/raw"))()">Copy Script</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-media"><img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0.6;">
-        <div class="media-tags">
-          <span class="media-badge free">FREE</span>
+    <div class="script-card reveal-on-scroll" style="transition-delay: 0.1s;">
+      <div class="script-card-inner">
+        <div class="script-card-glow"></div>
+        <div class="script-image-wrap">
+          <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2">
+          <div class="script-image-overlay"></div>
         </div>
-        <span class="media-category">Mystery</span>
-      </div>
-      <div class="card-body">
-        <div class="card-top">
-          <div class="card-title-row">
-            <div class="card-icon">🗡️</div>
-            <div>
-              <div class="card-title">Summer Event</div>
-              <div class="card-version">Seasonal Build</div>
+        <div class="script-card-content">
+          <div class="script-header">
+            <div class="script-icon-wrap">
+              <div class="script-icon">🗡️</div>
+              <div>
+                <div class="script-title">Summer Event</div>
+                <div class="script-version">Seasonal Build</div>
+              </div>
             </div>
+            <div class="script-badge">FREE</div>
           </div>
-          <div class="badge-free">FREE</div>
-        </div>
-        <p class="card-desc">Summer event edition with new maps, cosmetics, and limited-time knife skins.</p>
-        <div class="tag-row">
-          <span class="tag">Auto Farm</span>
-          <span class="tag">ESP</span>
-          <span class="tag">Shoot Murder</span>
-          <span class="tag">3+ more</span>
-        </div>
-        <div class="card-foot">
-          <div class="rating"><b>★★★★★</b> 4.9 · 1,204 reviews</div>
-          <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet(`"https://pastefy.app/Z7gzqEEB/raw`"))()">Copy Script</button>
+          <p class="script-desc">Summer event edition with new maps, cosmetics, and limited-time knife skins.</p>
+          <div class="script-tags">
+            <span class="script-tag">Auto Farm</span>
+            <span class="script-tag">ESP</span>
+            <span class="script-tag">Shoot Murder</span>
+          </div>
+          <div class="script-footer">
+            <div class="script-rating">★★★★★ <span>(1.2k)</span></div>
+            <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet("https://pastefy.app/Z7gzqEEB/raw"))()">Copy Script</button>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
 <section class="section" id="features">
-  <div class="section-head">
+  <div class="section-head reveal-on-scroll">
     <div class="eyebrow">Why Choose Us</div>
     <h2 class="section-title">Built different</h2>
   </div>
-  <div class="feat-grid">
+  <div class="feat-grid reveal-on-scroll">
     <div class="feat">
       <div class="feat-icon">🛡️</div>
       <h3>Undetected</h3>
@@ -487,29 +449,31 @@
 </section>
 
 <section class="section" id="status">
-  <div class="section-head">
+  <div class="section-head reveal-on-scroll">
     <div class="eyebrow">Live Status</div>
     <h2 class="section-title">Script status</h2>
   </div>
-  <div class="status-list">
+  <div class="status-list reveal-on-scroll">
     <div class="status-row"><span>🌸 Grow a Garden 2</span><span class="status-ok">Operational</span></div>
     <div class="status-row"><span>🗡️ Murder Mystery 2</span><span class="status-ok">Operational</span></div>
   </div>
-  <div class="status-time">Last checked: Aug 14, 2026, 09:00 AM</div>
+  <div class="status-time reveal-on-scroll">Last checked: Aug 14, 2026, 09:00 AM</div>
 </section>
 
 <section class="section" id="faq">
-  <div class="section-head">
+  <div class="section-head reveal-on-scroll">
     <div class="eyebrow">FAQ</div>
     <h2 class="section-title">Got questions?</h2>
   </div>
-  <div class="faq-item"><div class="faq-q">What executor should I use? <span class="chev">▾</span></div></div>
-  <div class="faq-item"><div class="faq-q">Are the scripts safe to use? <span class="chev">▾</span></div></div>
-  <div class="faq-item"><div class="faq-q">How do I get Premium scripts? <span class="chev">▾</span></div></div>
-  <div class="faq-item"><div class="faq-q">Script not working after update? <span class="chev">▾</span></div></div>
+  <div class="reveal-on-scroll">
+    <div class="faq-item"><div class="faq-q">What executor should I use? <span class="chev">▾</span></div></div>
+    <div class="faq-item"><div class="faq-q">Are the scripts safe to use? <span class="chev">▾</span></div></div>
+    <div class="faq-item"><div class="faq-q">How do I get Premium scripts? <span class="chev">▾</span></div></div>
+    <div class="faq-item"><div class="faq-q">Script not working after update? <span class="chev">▾</span></div></div>
+  </div>
 </section>
 
-<div class="cta-band">
+<div class="cta-band reveal-on-scroll">
   <div class="cta-inner">
     <h2>Ready to <span class="accent">dominate?</span></h2>
     <p>Join thousands of players using Reign Scripts. Free scripts updated daily.</p>
@@ -526,12 +490,37 @@
 <script src="checkpoint.js"></script>
 
 <div id="toast" style="position:fixed; bottom:24px; right:24px; z-index:100; transform:translateY(20px); opacity:0; pointer-events:none; transition:all 0.5s ease; background:#111; border:1px solid var(--green); padding:12px 20px; border-radius:12px; color:var(--text); font-size:14px; display:flex; align-items:center; gap:8px;">
-  <span style="color:var(--green)">?</span> Script copied to clipboard!
+  <span style="color:var(--green)">&#10003;</span> Script copied to clipboard!
 </div>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    // Nav slide logic
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        const header = document.querySelector('header');
+        if (currentScroll > lastScroll && currentScroll > 50) {
+            header.classList.add('nav-hidden');
+        } else {
+            header.classList.remove('nav-hidden');
+        }
+        lastScroll = currentScroll;
+    });
+
+    // Reveal on scroll logic
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Copy script logic
     const copyBtns = document.querySelectorAll(".copy-btn");
     copyBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -573,6 +562,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-
-
-
