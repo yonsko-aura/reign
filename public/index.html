@@ -133,10 +133,12 @@
   .tab.active{ background: var(--yellow); color:#111; border-color:var(--yellow); font-weight:700; }
 
   /* Bloxified style cards */
-  .script-card { position: relative; }
-  .script-card-inner { background: #161616; border: 1px solid #262626; border-radius: 14px; overflow: hidden; position: relative; transition: all 0.3s ease; }
-  .script-card-inner:hover { border-color: #7a6420; transform: translateY(-4px); box-shadow: 0 10px 30px -10px rgba(242,201,76,0.15); }
-  .script-card-glow { position: absolute; top: 0; left: 0; right: 0; height: 100%; background: radial-gradient(circle at center, rgba(242,201,76,0.08) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1; }
+  .script-card { position: relative; opacity: 1; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--delay, 0s); }
+  .script-card-inner { background: #161616; border: 1px solid #262626; border-radius: 1.25rem; overflow: hidden; position: relative; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .script-card-inner::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); transition: left 0.6s ease; z-index: 5; pointer-events: none; }
+  .script-card-inner:hover::before { left: 100%; }
+  .script-card-inner:hover { border-color: #7a6420; transform: translateY(-6px); box-shadow: 0 25px 50px -20px rgba(242,201,76,0.15); }
+  .script-card-glow { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(242,201,76,0.08) 0%, transparent 60%); opacity: 0; transition: opacity 0.5s; pointer-events: none; z-index: 1; }
   .script-card-inner:hover .script-card-glow { opacity: 1; }
   .script-image-wrap { height: 140px; width: 100%; background: #0a0a0a; position: relative; overflow: hidden; }
   .script-image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: transform 0.5s ease, opacity 0.5s ease; }
@@ -345,7 +347,7 @@
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
       <div class="script-card reveal-on-scroll">
-          <div class="script-card-inner">
+          <div class="script-card-inner group">
               <div class="script-card-glow"></div>
               <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
                   <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
@@ -378,7 +380,7 @@
       </div>
 
       <div class="script-card reveal-on-scroll" style="transition-delay: 0.1s;">
-          <div class="script-card-inner">
+          <div class="script-card-inner group">
               <div class="script-card-glow"></div>
               <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
                   <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
