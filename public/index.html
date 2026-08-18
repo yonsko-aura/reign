@@ -1,36 +1,280 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REIGN SCRIPTS</title>
-    <script>
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
-    </script>
-    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#fcd34d',400:'#fbbf24',500:'#f59e0b',600:'#d97706',700:'#b45309',800:'#92400e',900:'#78350f',950:'#451a03' },
-                        accent: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-                        neon: { blue: '#00f0ff', purple: '#b347ea', pink: '#ff2d75', green: '#39ff14' }
-                    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reign Scripts — Script Hub</title>
+<style>
+  :root{
+    --bg: #0a0a0a;
+    --bg-raised: #131313;
+    --bg-card: #161616;
+    --line: #262626;
+    --line-soft: #1c1c1c;
+    --text: #f2f2f0;
+    --text-dim: #9a9a94;
+    --text-faint: #6b6b66;
+    --yellow: #f2c94c;
+    --yellow-dim: #7a6420;
+    --green: #7cb87a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner{
+    max-width: 1100px; margin: 0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 20px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:8px;
+    background: var(--yellow);
+    color:#111;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:16px;
+  }
+  .brand-name{font-weight:700; font-size:15px; letter-spacing:0.02em;}
+  .brand-sub{font-size:10px; color:var(--text-faint); letter-spacing:0.15em; text-transform:uppercase;}
+
+  nav{display:none;}
+  @media (min-width: 860px){
+    nav{display:flex; gap:28px; font-size:14px; color:var(--text-dim);}
+    nav a:hover{color:var(--text);}
+    nav a.active{color:var(--yellow);}
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding: 9px 18px; border-radius: 7px;
+    font-size: 13px; font-weight:700;
+    cursor:pointer; border:1px solid transparent;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+  }
+  .btn:active{transform: scale(0.97);}
+  .btn-solid{ background: var(--yellow); color:#111; }
+  .btn-solid:hover{ background:#f5d370; }
+  .btn-outline{ border-color: var(--line); color: var(--text); background:transparent; }
+  .btn-outline:hover{ border-color: var(--yellow-dim); }
+
+  .hero{
+    max-width: 900px; margin: 0 auto;
+    padding: 72px 24px 48px;
+    text-align:center;
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:7px;
+    border:1px solid var(--line);
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing:0.08em; text-transform:uppercase;
+    margin-bottom: 22px;
+  }
+  .pill-dot{width:6px; height:6px; border-radius:50%; background:var(--green);}
+  h1.display{
+    font-size: 44px; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.08;
+  }
+  h1.display .accent{ color: var(--yellow); }
+  .hero p.lede{
+    max-width: 520px; margin: 20px auto 0;
+    color: var(--text-dim); font-size: 15px;
+  }
+  .hero-cta{
+    display:flex; gap:12px; justify-content:center;
+    margin-top: 28px; flex-wrap:wrap;
+  }
+  .stat-grid{
+    display:grid; grid-template-columns: repeat(4,1fr);
+    gap:1px; background:var(--line-soft);
+    border:1px solid var(--line-soft); border-radius:12px;
+    overflow:hidden; margin-top: 44px;
+  }
+  .stat{ background:var(--bg-raised); padding: 18px 8px; text-align:center; }
+  .stat b{ display:block; font-size: 22px; color: var(--yellow); font-weight:800; }
+  .stat span{ display:block; font-size: 10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; margin-top:4px;}
+
+  .section{ max-width: 1000px; margin: 0 auto; padding: 64px 20px; }
+  .section-head{ text-align:center; margin-bottom: 36px; }
+  .eyebrow{
+    font-size: 11px; letter-spacing:0.15em; text-transform:uppercase;
+    color: var(--yellow); font-weight:700; margin-bottom:10px;
+  }
+  h2.section-title{ font-size: 30px; font-weight:800; letter-spacing:-0.01em; }
+  .section-desc{ color: var(--text-dim); font-size: 14px; max-width:460px; margin: 12px auto 0;}
+
+  .tabs{
+    display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    margin-bottom: 30px;
+  }
+  .tab{
+    padding: 7px 16px; border-radius: 999px; font-size:13px;
+    border:1px solid var(--line); color: var(--text-dim); cursor:pointer;
+  }
+  .tab.active{ background: var(--yellow); color:#111; border-color:var(--yellow); font-weight:700; }
+
+  .card-grid{
+    display:grid; grid-template-columns: 1fr; gap:16px;
+  }
+  @media(min-width:700px){ .card-grid{ grid-template-columns: 1fr 1fr; } }
+  .card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow:hidden;
+    transition: border-color .15s ease;
+  }
+  .card:hover{ border-color: var(--yellow-dim); }
+  .card-media{
+    height: 140px;
+    background: linear-gradient(135deg, #1a1a1a, #0e0e0e);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--text-faint); font-size: 12px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-media img{
+    width:100%; height:100%; object-fit:cover;
+  }
+  .media-tags{ z-index:1;
+    position:absolute; top:10px; left:10px; right:10px;
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .media-badge{
+    font-size:10px; font-weight:800; padding:4px 8px; border-radius:5px;
+    background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .media-badge.free{ color: var(--green); border-color: rgba(124,184,122,0.4); }
+  .media-badge.ver{ color: var(--text-dim); }
+  .media-category{ z-index:1;
+    position:absolute; bottom:10px; left:10px;
+    font-size:11px; font-weight:600; padding:5px 10px; border-radius:6px;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .card-body{ padding: 16px 18px 18px; }
+  .card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .card-title-row{ display:flex; align-items:center; gap:10px; }
+  .card-icon{
+    width:34px; height:34px; border-radius:8px;
+    background: var(--bg-raised); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+    flex-shrink:0;
+  }
+  .card-title{ font-size:15px; font-weight:700; }
+  .card-version{ font-size:11px; color:var(--text-faint); }
+  .badge-free{
+    font-size:10px; font-weight:800; letter-spacing:0.05em;
+    color: var(--yellow); border:1px solid var(--yellow-dim);
+    padding: 3px 8px; border-radius:5px; white-space:nowrap;
+  }
+  .card-desc{ font-size:13px; color:var(--text-dim); margin: 12px 0 12px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .tag{
+    font-size:11px; color:var(--text-dim);
+    border:1px solid var(--line); padding:4px 9px; border-radius:6px;
+  }
+  .card-foot{ display:flex; align-items:center; justify-content:space-between; }
+  .rating{ font-size:12px; color:var(--text-faint); }
+  .rating b{ color: var(--yellow); }
+
+  .feat-grid{
+    display:grid; grid-template-columns: 1fr; gap:14px;
+  }
+  @media(min-width:700px){ .feat-grid{ grid-template-columns: 1fr 1fr; } }
+  .feat{
+    background: var(--bg-card); border:1px solid var(--line);
+    border-radius: 14px; padding: 22px;
+  }
+  .feat-icon{
+    width:38px; height:38px; border-radius:9px;
+    background: rgba(242,201,76,0.1); border:1px solid var(--yellow-dim);
+    color: var(--yellow);
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; margin-bottom:16px;
+  }
+  .feat h3{ font-size:15px; font-weight:700; margin-bottom:6px; }
+  .feat p{ font-size:13px; color: var(--text-dim); }
+
+  .status-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+  .status-row{
+    display:flex; align-items:center; justify-content:space-between;
+    background: var(--bg-card); border:1px solid var(--line);
+    border-radius:10px; padding: 14px 18px; font-size:14px;
+  }
+  .status-ok{
+    font-size:11px; font-weight:700; color: var(--green);
+    background: rgba(124,184,122,0.1); border:1px solid rgba(124,184,122,0.3);
+    padding: 4px 10px; border-radius:999px;
+  }
+  .status-time{
+    text-align:center; font-size:12px; color:var(--text-faint);
+    border:1px solid var(--line-soft); border-radius:10px; padding:12px;
+  }
+
+  .faq-item{
+    border:1px solid var(--line); border-radius:10px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .faq-q{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 15px 18px; font-size:14px; font-weight:600; cursor:pointer;
+  }
+  .faq-q .chev{ color: var(--yellow); font-size:12px; }
+
+  .cta-band{
+    max-width: 1000px; margin: 0 auto 64px; padding: 20px;
+  }
+  .cta-inner{
+    background: var(--bg-card);
+    border: 1px solid var(--yellow-dim);
+    border-radius: 18px;
+    text-align:center;
+    padding: 48px 24px;
+  }
+  .cta-inner h2{ font-size:26px; font-weight:800; }
+  .cta-inner h2 .accent{ color: var(--yellow); }
+  .cta-inner p{ color: var(--text-dim); font-size:14px; margin: 12px 0 24px; }
+  .cta-btns{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  footer{
+    text-align:center; padding: 24px; font-size:12px; color:var(--text-faint);
+    border-top: 1px solid var(--line-soft);
+  }
+.cp-spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #f59e0b; animation: cp-spin 1s ease-in-out infinite; } @keyframes cp-spin { to { transform: rotate(360deg); } }
+</style>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+    tailwind.config = {
+        corePlugins: { preflight: false },
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    brand: { 50:"#fffbeb",100:"#fef3c7",200:"#fde68a",300:"#fcd34d",400:"#fbbf24",500:"#f59e0b",600:"#d97706",700:"#b45309",800:"#92400e",900:"#78350f",950:"#451a03" },
+                    accent: { 400: "#fbbf24", 500: "#f59e0b", 600: "#d97706" }
                 }
             }
         }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    }
+</script>
 </head>
-<body class="bg-gray-950 text-white overflow-x-hidden">
-
-    
+<body>
     <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto">
         
         <div class="absolute inset-0 bg-gray-950">
@@ -78,278 +322,257 @@
             </div>
         </div>
     </div>
+<div id="main-site" class="hidden">
 
-    
-    <div id="main-site" class="hidden">
+<header>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark" style="background:transparent; overflow:hidden; padding:0;">
+        <img src="logo.jpg" alt="Reign Scripts Logo" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div>
+        <div class="brand-name">REIGN SCRIPTS</div>
+        <div class="brand-sub">Script Hub</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#scripts">Scripts</a>
+      <a href="#features">Features</a>
+      <a href="#">Tutorial</a>
+      <a href="#status">Status</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#scripts" class="btn btn-solid">Get Scripts</a>
+  </div>
+</header>
 
+<section class="hero">
+  <div class="pill"><span class="pill-dot"></span> Active</div>
+  <h1 class="display">Next gen<br><span class="accent">Roblox scripts</span></h1>
+  <p class="lede">Premium scripts for GAG2, MM2, Pet Sim 99, and more. Undetected. Updated daily. Built for dominance.</p>
+  <div class="hero-cta">
+    <a href="#scripts" class="btn btn-solid">Browse Scripts</a>
+    <a href="#" class="btn btn-outline">Join Discord</a>
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><b>15+</b><span>Scripts</span></div>
+    <div class="stat"><b>50,000+</b><span>Executions</span></div>
+    <div class="stat"><b>99%</b><span>Uptime</span></div>
+    <div class="stat"><b>24/7</b><span>Updates</span></div>
+  </div>
+</section>
 
-    
-    <div id="video-bg" class="fixed inset-0 z-0">
-        <video autoplay muted loop playsinline id="bg-video" classmp4="absolute w-full h-full object-cover opacity-40">
-            <source src="https://bloxified.b-cdn.net/L.mp4" type="video/mp4">
-        </video>
-        
-        <div class="absolute inset-0 bg-gradient-to-b from-gray-950/80 via-gray-950/60 to-gray-950/95"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.15),transparent_60%)]"></div>
+<section class="section" id="scripts">
+  <div class="section-head">
+    <div class="eyebrow">Our Arsenal</div>
+    <h2 class="section-title">Premium scripts</h2>
+    <p class="section-desc">Each script is handcrafted, tested, and updated regularly for maximum performance.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">All</div>
+    <div class="tab">Combat</div>
+    <div class="tab">Trading</div>
+    <div class="tab">Farming</div>
+    <div class="tab">Utility</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-media"><img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0.6;">
+        <div class="media-tags">
+          <span class="media-badge free">FREE</span>
+          <span class="media-badge ver">v3.5</span>
+        </div>
+        <span class="media-category">Mystery</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title-row">
+            <div class="card-icon">🗡️</div>
+            <div>
+              <div class="card-title">Overdrive Hub</div>
+              <div class="card-version">Premium · Keyless</div>
+            </div>
+          </div>
+          <div class="badge-free">FREE</div>
+        </div>
+        <p class="card-desc">A social deduction thriller script with maps, modes, and a full knife economy.</p>
+        <div class="tag-row">
+          <span class="tag">Auto Farm</span>
+          <span class="tag">Aimbot</span>
+          <span class="tag">ESP</span>
+          <span class="tag">Kill All</span>
+          <span class="tag">20+ more...</span>
+        </div>
+        <div class="card-foot">
+          <div class="rating"><b>★★★★★</b> 4.8 · 3,892 reviews</div>
+          <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet(`"https://pastefy.app/Z7gzqEEB/raw`"))()">Copy Script</button>
+        </div>
+      </div>
     </div>
 
-    
-    <canvas id="particles" class="fixed inset-0 z-[1] pointer-events-none"></canvas>
-
-    
-    <div id="cursor-glow" class="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-[2] opacity-0 transition-opacity duration-300" style="background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);"></div>
-
-    
-    
-
-    <main class="relative z-10">
-
-        
-        <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 pb-16 px-4">
-            <div class="max-w-5xl mx-auto text-center">
-                <div class="animate-fade-in-up" style="animation-delay: 0.4s">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs sm:text-sm font-medium mb-6 sm:mb-8 backdrop-blur-sm">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        ACTIVE
-                    </div>
-                </div>
-
-                <h2 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-['Inter'] mb-6 sm:mb-8 leading-tight animate-fade-in-up" style="animation-delay: 0.5s">
-                    <span class="bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent">NEXT GEN</span><br>
-                    <span class="bg-gradient-to-r from-brand-400 via-accent-400 to-neon-blue bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">ROBLOX SCRIPTS</span>
-                </h2>
-
-                <p class="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed font-['Inter'] animate-fade-in-up" style="animation-delay: 0.6s">
-                    Premium scripts for GAG2, MM2, Pet Sim 99, and more. 
-                    Undetected. Updated daily. Built for dominance.
-                </p>
-
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.7s">
-                    <a href="#scripts" class="group relative w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold text-base sm:text-lg transition-all duration-300 hover:-translate-y-1 shadow-2xl shadow-brand-500/30 hover:shadow-brand-500/50 overflow-hidden font-['Inter']">
-                        <span class="relative z-10 flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            Browse Scripts
-                        </span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-brand-500 to-accent-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </a>
-                    <a href="https://discord.gg/UeUdyNDK3y" class="group w-full sm:w-auto px-8 py-4 rounded-2xl border border-white/10 hover:border-brand-500/50 text-gray-300 hover:text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm hover:bg-white/5 font-['Inter']">
-                        <span class="flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"/></svg>
-                            Join Discord
-                        </span>
-                    </a>
-                </div>
-
-                
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16 sm:mt-20 animate-fade-in-up" style="animation-delay: 0.9s">
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="15">0</span><span class="stat-number">+</span>
-                        <span class="stat-label">Scripts</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="50000">0</span><span class="stat-number">+</span>
-                        <span class="stat-label">Executions</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="99">0</span><span class="stat-number">%</span>
-                        <span class="stat-label">Uptime</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number" data-target="24">0</span><span class="stat-number">/7</span>
-                        <span class="stat-label">Updates</span>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden sm:block">
-                <div class="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5">
-                    <div class="w-1.5 h-3 rounded-full bg-brand-400 animate-scroll-dot"></div>
-                </div>
-            </div>
-        </section>
-
-
-        
-        
-
-        
-        <section id="scripts" class="py-20 sm:py-32 px-4 relative">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-12 sm:mb-16 reveal-on-scroll">
-                    <span class="inline-block px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold tracking-widest uppercase mb-4 font-['Inter']">Our Arsenal</span>
-                    <h3 class="text-3xl sm:text-5xl md:text-6xl font-bold font-['Inter'] mb-4">
-                        <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">PREMIUM </span>
-                        <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">SCRIPTS</span>
-                    </h3>
-                    <p class="text-gray-500 max-w-xl mx-auto font-['Inter']">Each script is handcrafted, tested, and updated regularly for maximum performance.</p>
-                </div>
-
-                
-                <div class="flex flex-wrap justify-center gap-2 mb-10 reveal-on-scroll">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="combat">Combat</button>
-                    <button class="filter-btn" data-filter="trading">Trading</button>
-                    <button class="filter-btn" data-filter="farming">Farming</button>
-                    <button class="filter-btn" data-filter="utility">Utility</button>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="scripts-grid">
-
-                    
-                    <div class="script-card reveal-on-scroll" data-category="combat" style="--delay: 0.1s">
-                        <div class="script-card-inner">
-                            <div class="script-card-glow"></div>
-                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                                <img src="https://tr.rbxcdn.com/180DAY-4d023b36ace24ced73efbaadcb66b37c/768/432/Image/Webp/noFilter" alt="Blade Ball" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">🌸</div>
-                                        <div>
-                                            <h4 class="font-bold text-lg font-['Inter']">Grow a Garden 2 </h4>
-                                            <span class="text-xs text-gray-500 font-['Inter']">v2.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
-                                </div>
-                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Auto Scale Fruits, Spawn Pets, Auto Steal, Pet Finder.</p>
-                                <div class="flex flex-wrap gap-2 mb-5">
-                                    <span class="tag">Auto Plant</span>
-                                    <span class="tag">Auto Harvest</span>
-                                    <span class="tag">Keyless</span>
-                                    <span class="tag">Anti Ban</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(2.4k)</span></div>
-                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/Z7gzqEEB/raw&quot;))()">Copy Script</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="script-card reveal-on-scroll" data-category="combat" style="--delay: 0.1s">
-                        <div class="script-card-inner">
-                            <div class="script-card-glow"></div>
-                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                                <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="Blade Ball" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">⚔️</div>
-                                        <div>
-                                            <h4 class="font-bold text-lg font-['Inter']">Murder Mystery 2 </h4>
-                                            <span class="text-xs text-gray-500 font-['Inter']">v2.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
-                                </div>
-                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Overpowered Murder Mystery 2 Script ( Keyless ) </p>
-                                <div class="flex flex-wrap gap-2 mb-5">
-                                    <span class="tag">Aimbot</span>
-                                    <span class="tag">Auto Kill</span>
-                                    <span class="tag">Keyless</span>
-                                    <span class="tag">20 More Features</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(3.5k)</span></div>
-                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/zgeUomj2/raw&quot;))()">Copy Script</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-					                    
-                    <div class="script-card reveal-on-scroll" data-category="trading" style="--delay: 0.1s">
-                        <div class="script-card-inner">
-                            <div class="script-card-glow"></div>
-                            <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                                <img src="https://tr.rbxcdn.com/180DAY-036d7aa0dd31d81858fbd2c5ab44ea4b/768/432/Image/Webp/noFilter" alt="Adopt Me" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-                                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center justify-between mb-4 mt-[-2rem] relative z-10">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-xl bg-gray-950 border border-white/10 flex items-center justify-center text-2xl shadow-lg">&#128062;</div>
-                                        <div>
-                                            <h4 class="font-bold text-lg font-['Inter']">Adopt Me</h4>
-                                            <span class="text-xs text-gray-500 font-['Inter']">v1.0</span>
-                                        </div>
-                                    </div>
-                                    <span class="px-2 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold">FREE</span>
-                                </div>
-                                <p class="text-gray-400 text-sm mb-5 font-['Inter'] leading-relaxed">Overpowered Adopt Me Script ( Keyless ) </p>
-                                <div class="flex flex-wrap gap-2 mb-5">
-                                    <span class="tag">House Cloner</span>
-                                    <span class="tag">Auto Egg Hatch</span>
-                                    <span class="tag">Keyless</span>
-                                    <span class="tag">Spawner</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★ <span class="text-gray-500 ml-1">(2.1k)</span></div>
-                                    <button class="copy-btn" data-script="loadstring(game:HttpGet(&quot;https://pastefy.app/rry8fTlt/raw&quot;))()">Copy Script</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                </div>
-            </div>
-        </section>
-
-        
-        
-
-        
-        
-
-        
-        
-
-        
-        
-    </main>
-
-    
-    <footer class="relative z-10 border-t border-white/5 py-8 sm:py-12 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center font-bold text-sm">R</div>
-                    <span class="text-sm text-gray-500 font-['Inter']">© 2026 REIGN SCRIPTS Hub. All rights reserved.</span>
-                </div>
-                <div class="flex items-center gap-6">
-                    <a href="https://discord.gg/UeUdyNDK3y" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">Discord</a>
-                    <a href="#" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">YouTube</a>
-                    <a href="#" class="text-gray-500 hover:text-brand-400 transition-colors text-sm font-['Inter']">Telegram</a>
-                </div>
-            </div>
+    <div class="card">
+      <div class="card-media"><img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; opacity:0.6;">
+        <div class="media-tags">
+          <span class="media-badge free">FREE</span>
         </div>
-    </footer>
-
-    
-    <div id="toast" class="fixed bottom-6 right-6 z-[100] transform translate-y-20 opacity-0 transition-all duration-500 pointer-events-none">
-        <div class="flex items-center gap-3 px-5 py-3 rounded-2xl bg-gray-900 border border-green-500/30 shadow-2xl shadow-green-500/10 backdrop-blur-xl">
-            <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-sm font-medium text-gray-200 font-['Inter']">Script copied to clipboard!</span>
+        <span class="media-category">Mystery</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-title-row">
+            <div class="card-icon">🗡️</div>
+            <div>
+              <div class="card-title">Summer Event</div>
+              <div class="card-version">Seasonal Build</div>
+            </div>
+          </div>
+          <div class="badge-free">FREE</div>
         </div>
+        <p class="card-desc">Summer event edition with new maps, cosmetics, and limited-time knife skins.</p>
+        <div class="tag-row">
+          <span class="tag">Auto Farm</span>
+          <span class="tag">ESP</span>
+          <span class="tag">Shoot Murder</span>
+          <span class="tag">3+ more</span>
+        </div>
+        <div class="card-foot">
+          <div class="rating"><b>★★★★★</b> 4.9 · 1,204 reviews</div>
+          <button class="btn btn-solid copy-btn" data-script="loadstring(game:HttpGet(`"https://pastefy.app/Z7gzqEEB/raw`"))()">Copy Script</button>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    
-    
+<section class="section" id="features">
+  <div class="section-head">
+    <div class="eyebrow">Why Choose Us</div>
+    <h2 class="section-title">Built different</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">🛡️</div>
+      <h3>Undetected</h3>
+      <p>Advanced obfuscation and anti-detection. Bypasses Byfron, Hyperion, and all major anti-cheats.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <h3>Lightning fast</h3>
+      <p>Optimized Luau code. Zero lag execution, minimal memory footprint, maximum performance.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔄</div>
+      <h3>Auto updates</h3>
+      <p>Scripts update automatically when games patch. Always running the latest version.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎛️</div>
+      <h3>Customizable UI</h3>
+      <p>Drag-and-drop GUI with keybinds, themes, and profiles. Make it yours.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💬</div>
+      <h3>24/7 support</h3>
+      <p>Active Discord community with dedicated support staff. Help is always one message away.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔒</div>
+      <h3>Secure keys</h3>
+      <p>Premium key system with HWID lock. Your scripts, your access, fully protected.</p>
+    </div>
+  </div>
+</section>
 
-    </div> 
-    <script src="checkpoint.js"></script>
-    <script src="app.js"></script>
-    <script src="logger.js"></script>
+<section class="section" id="status">
+  <div class="section-head">
+    <div class="eyebrow">Live Status</div>
+    <h2 class="section-title">Script status</h2>
+  </div>
+  <div class="status-list">
+    <div class="status-row"><span>🌸 Grow a Garden 2</span><span class="status-ok">Operational</span></div>
+    <div class="status-row"><span>🗡️ Murder Mystery 2</span><span class="status-ok">Operational</span></div>
+  </div>
+  <div class="status-time">Last checked: Aug 14, 2026, 09:00 AM</div>
+</section>
+
+<section class="section" id="faq">
+  <div class="section-head">
+    <div class="eyebrow">FAQ</div>
+    <h2 class="section-title">Got questions?</h2>
+  </div>
+  <div class="faq-item"><div class="faq-q">What executor should I use? <span class="chev">▾</span></div></div>
+  <div class="faq-item"><div class="faq-q">Are the scripts safe to use? <span class="chev">▾</span></div></div>
+  <div class="faq-item"><div class="faq-q">How do I get Premium scripts? <span class="chev">▾</span></div></div>
+  <div class="faq-item"><div class="faq-q">Script not working after update? <span class="chev">▾</span></div></div>
+</section>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <h2>Ready to <span class="accent">dominate?</span></h2>
+    <p>Join thousands of players using Reign Scripts. Free scripts updated daily.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn btn-solid">Get Started Free</a>
+      <a href="#" class="btn btn-outline">Join Discord</a>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Reign Scripts. Not affiliated with Roblox Corporation.</footer>
+
+</div>
+<script src="checkpoint.js"></script>
+
+<div id="toast" style="position:fixed; bottom:24px; right:24px; z-index:100; transform:translateY(20px); opacity:0; pointer-events:none; transition:all 0.5s ease; background:#111; border:1px solid var(--green); padding:12px 20px; border-radius:12px; color:var(--text); font-size:14px; display:flex; align-items:center; gap:8px;">
+  <span style="color:var(--green)">?</span> Script copied to clipboard!
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const copyBtns = document.querySelectorAll(".copy-btn");
+    copyBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const script = btn.dataset.script;
+            navigator.clipboard.writeText(script).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = "Copied!";
+                showToast();
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                const textarea = document.createElement("textarea");
+                textarea.value = script;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+                const originalText = btn.textContent;
+                btn.textContent = "Copied!";
+                showToast();
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        });
+    });
+    function showToast() {
+        const toast = document.getElementById("toast");
+        toast.style.transform = "translateY(0)";
+        toast.style.opacity = "1";
+        setTimeout(() => {
+            toast.style.transform = "translateY(20px)";
+            toast.style.opacity = "0";
+        }, 2500);
+    }
+});
+</script>
+
 </body>
 </html>
+
 
 
