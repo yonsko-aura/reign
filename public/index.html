@@ -488,14 +488,14 @@
     <h2 class="section-title">Tutorial</h2>
   </div>
     <div class="reveal-on-scroll max-w-3xl mx-auto">
-    <div class="flex flex-wrap justify-center gap-8 sm:gap-12 mb-10">
-        <button onclick="showTut('ios')" id="btn-ios" class="px-10 py-4 text-lg rounded-full whitespace-nowrap bg-[#f2c94c] text-[#111] font-bold transition-all shadow-lg">iOS Tutorial</button>
-        <button onclick="showTut('android')" id="btn-android" class="px-10 py-4 text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10">Android Tutorial</button>
+    <div class="flex justify-center mb-10" style="gap: 2rem;">
+        <button onclick="showTut('ios')" id="btn-ios" style="padding: 1rem 2.5rem;" class="text-lg rounded-full whitespace-nowrap bg-[#f2c94c] text-[#111] font-bold transition-all shadow-lg">iOS Tutorial</button>
+        <button onclick="showTut('android')" id="btn-android" style="padding: 1rem 2.5rem;" class="text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10">Android Tutorial</button>
     </div>
-    <div id="vid-ios" class="bg-gray-900/50 p-4 sm:p-6 rounded-2xl border border-white/5 aspect-square max-w-md mx-auto w-full shadow-2xl transition-all duration-500">
+    <div id="vid-ios" class="bg-gray-900/50 p-4 sm:p-6 rounded-2xl border border-white/5 aspect-video w-full max-w-3xl mx-auto shadow-2xl transition-all duration-500">
         <iframe class="rounded-xl w-full h-full" src="https://www.youtube.com/embed/4bOEsktL6Mk" title="iOS Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
-    <div id="vid-android" class="hidden bg-gray-900/50 p-4 sm:p-6 rounded-2xl border border-white/5 aspect-square max-w-md mx-auto w-full shadow-2xl transition-all duration-500">
+    <div id="vid-android" class="hidden bg-gray-900/50 p-4 sm:p-6 rounded-2xl border border-white/5 aspect-video w-full max-w-3xl mx-auto shadow-2xl transition-all duration-500">
         <iframe class="rounded-xl w-full h-full" src="https://www.youtube.com/embed/w3yJbO00e10" title="Android Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
@@ -503,11 +503,11 @@
     function showTut(platform) {
         document.getElementById('vid-ios').classList.add('hidden');
         document.getElementById('vid-android').classList.add('hidden');
-        document.getElementById('btn-ios').className = 'px-10 py-4 text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10';
-        document.getElementById('btn-android').className = 'px-10 py-4 text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10';
+        document.getElementById('btn-ios').className = 'text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10';
+        document.getElementById('btn-android').className = 'text-lg rounded-full whitespace-nowrap bg-white/5 border border-white/10 text-gray-400 font-bold transition-all hover:bg-white/10';
         
         document.getElementById('vid-' + platform).classList.remove('hidden');
-        document.getElementById('btn-' + platform).className = 'px-10 py-4 text-lg rounded-full whitespace-nowrap bg-[#f2c94c] text-[#111] font-bold transition-all shadow-lg';
+        document.getElementById('btn-' + platform).className = 'text-lg rounded-full whitespace-nowrap bg-[#f2c94c] text-[#111] font-bold transition-all shadow-lg';
     }
   </script>
 </section>
