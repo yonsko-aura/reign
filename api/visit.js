@@ -1,93 +1,78 @@
-const net = require("net");
-
-function clean(value, limit) {
-  return String(value == null ? "" : value).replace(/[\u0000-\u001f\u007f]/g, " ").slice(0, limit);
-}
-
-function isPublicIp(ip) {
-  if (!net.isIP(ip)) return false;
-  if (ip === "::1" || ip === "127.0.0.1") return false;
-  if (/^10\.|^192\.168\.|^172\.(1[6-9]|2\d|3[01])\./.test(ip)) return false;
-  if (/^(fc|fd|fe80):/i.test(ip)) return false;
-  return true;
-}
-
-function validWebhook(url) {
-  return /^https:\/\/(?:discord(?:app)?\.com)\/api\/webhooks\/\d+\/[A-Za-z0-9._-]+$/.test(url);
-}
-
-async function lookupGeo(ip) {
-  if (!isPublicIp(ip)) return {};
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 3500);
-  try {
-    const r = await fetch("https://ipapi.co/" + encodeURIComponent(ip) + "/json/", {
-      headers: { "User-Agent": "ReignScriptsVisitLogger/1.0" },
-      signal: controller.signal
-    });
-    if (!r.ok) return {};
-    const data = await r.json();
-    return {
-      city: clean(data.city || "Unknown", 80),
-      country: clean(data.country_name || data.country || "Unknown", 80),
-      isp: clean(data.org || "Unknown", 120)
-    };
-  } catch {
-    return {};
-  } finally {
-    clearTimeout(timer);
-  }
-}
+﻿const crypto = require("crypto");
 
 module.exports = async (req, res) => {
+  // 1. Only POST requests allowed
   if (req.method !== "POST") {
-    res.status(405).json({ error: "method not allowed" });
-    return;
+    return res.status(405).json({ error: "Method Not Allowed" });
+  }
+
+  // 2. Enforce the body-size limit before JSON processing (Vercel parses body by default, 
+  // but we can check headers to defensively reject oversized payloads before trusting the parsed object).
+  const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+  if (contentLength > 10240) { // 10kb
+    return res.status(413).json({ error: "Payload Too Large" });
+  }
+
+  // 3. Strict schema validation
+  const event = req.body;
+  if (!event || typeof event !== "object" || Array.isArray(event)) {
+    return res.status(400).json({ error: "Invalid payload format" });
+  }
+  
+  // Exact field allowlist
+  const keys = Object.keys(event);
+  if (keys.length !== 1 || keys[0] !== 'event' || event.event !== 'visit') {
+    return res.status(400).json({ error: "Invalid payload schema" });
   }
 
   const enabled = process.env.LOGGING_ENABLED === "true";
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL || "";
-  const geoLookupEnabled = process.env.GEO_LOOKUP !== "false";
-  const siteName = process.env.SITE_NAME || "Reign Scripts";
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
+  const hmacSecret = process.env.RATE_LIMIT_SECRET;
 
   if (!enabled) return res.status(204).end();
-  if (!validWebhook(webhookUrl)) {
-    return res.status(503).json({ error: "logging webhook is not configured" });
+
+  // If storage isn't configured, we fail safely without exposing internals
+  if (!kvUrl || !kvToken || !hmacSecret) {
+    return res.status(503).json({ error: "Analytics storage is not configured" });
   }
 
-  const realIp = req.headers["x-real-ip"] || "";
-  const forwarded = clean(req.headers["x-forwarded-for"] || "", 256).split(",")[0].trim();
-  const ip = (realIp || forwarded || req.socket.remoteAddress || "Unknown").replace(/^::ffff:/, "");
+  // 4. Trusted IP parsing (Vercel Edge headers)
+  const vercelIp = req.headers["x-vercel-forwarded-for"];
+  const realIp = req.headers["x-real-ip"];
+  
+  // Do not trust arbitrary headers if not behind Vercel. 
+  // If the edge headers exist, we use them for rate-limiting anti-abuse.
+  const rawIp = vercelIp || realIp || req.socket.remoteAddress || "Unknown";
+  const ip = rawIp.split(",")[0].trim().replace(/^::ffff:/, "");
 
-  const event = req.body || {};
-  const geo = geoLookupEnabled ? await lookupGeo(ip) : {};
-
-  const embed = {
-    title: "New visitor",
-    color: 6514417,
-    fields: [
-      { name: "IP", value: "`" + clean(ip, 64) + "`", inline: true },
-      { name: "Location", value: "`" + clean([geo.city, geo.country].filter(Boolean).join(", ") || "Unknown", 170) + "`", inline: true },
-      { name: "ISP", value: "`" + clean(geo.isp || "Unknown", 170) + "`", inline: false },
-      { name: "Device", value: "`" + clean(event.device || "Unknown", 40) + "`", inline: true },
-      { name: "Browser / OS", value: "`" + clean((event.browser || "Unknown") + " / " + (event.os || "Unknown"), 100) + "`", inline: true },
-      { name: "Screen", value: "`" + clean((event.screen || "Unknown") + " • " + (event.viewport || "Unknown"), 100) + "`", inline: false },
-      { name: "Referrer", value: clean(event.referrer || "Direct", 500), inline: false },
-      { name: "Page", value: clean(event.page || "/", 500), inline: false }
-    ],
-    footer: { text: siteName + " • visit log" },
-    timestamp: new Date().toISOString()
-  };
+  // 5. Rate limiting with short-lived keyed hash (never persist raw IP)
+  const ipHash = crypto.createHmac('sha256', hmacSecret).update(ip).digest('hex');
+  const rateLimitKey = `rl:${ipHash}`;
 
   try {
-    const r = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ embeds: [embed] })
+    // Atomic SET NX PX 60000 (1 minute TTL)
+    const rlRes = await fetch(`${kvUrl}/set/${rateLimitKey}/1/NX/PX/60000`, {
+       headers: { Authorization: `Bearer ${kvToken}` }
     });
-    if (!r.ok) return res.status(502).json({ error: "webhook rejected the event" });
+    if (!rlRes.ok) return res.status(502).json({ error: "Storage error" });
+    
+    const rlData = await rlRes.json();
+    if (rlData.result !== "OK") {
+       return res.status(429).json({ error: "Too Many Requests" });
+    }
+
+    // 6. Atomic durable aggregate counter (UTC daily window)
+    const today = new Date().toISOString().split('T')[0];
+    const countKey = `visits:${today}`;
+    
+    const countRes = await fetch(`${kvUrl}/incr/${countKey}`, {
+       headers: { Authorization: `Bearer ${kvToken}` }
+    });
+    if (!countRes.ok) return res.status(502).json({ error: "Storage error" });
+
     return res.status(204).end();
   } catch {
-    return res.status(502).json({ error: "webhook request failed" });
+    return res.status(502).json({ error: "Storage request failed" });
   }
 };

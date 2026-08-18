@@ -1,6 +1,26 @@
-﻿{
+{
   "name": "reign-scripts",
   "version": "1.0.0",
   "private": true,
-  "scripts": {}
+  "scripts": {},
+  "description": "A premium script hub for Roblox games including Murder Mystery 2, Pet Simulator 99, and more.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yonsko-aura/reign.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yonsko-aura/reign/issues"
+  },
+  "homepage": "https://github.com/yonsko-aura/reign#readme",
+  "dependencies": {
+    "tailwindcss": "^3.4.19"
+  }
 }

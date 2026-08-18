@@ -1,4 +1,4 @@
-
+﻿
 
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -527,3 +527,7 @@ body { font-family: 'Inter', sans-serif; }
 #checkpoint-overlay {
     -webkit-overflow-scrolling: touch;
 }
+
+/* CodeRabbit trigger */
+
+#toast { position:fixed; bottom:24px; right:24px; z-index:100; transform:translateY(20px); opacity:0; pointer-events:none; transition:all 0.5s ease; background:#111; border:1px solid var(--green); padding:12px 20px; border-radius:12px; color:var(--text); font-size:14px; display:flex; align-items:center; gap:8px; }

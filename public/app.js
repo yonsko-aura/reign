@@ -386,3 +386,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     setTimeout(showRandomTestimonial, 3e3);
 });
+
+// CodeRabbit trigger

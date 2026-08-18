@@ -5,7 +5,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reign Scripts — Script Hub</title>
+<title>Reign Scripts | Script Hub</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link rel="apple-touch-icon" href="logo.jpg">
 <style>
   :root{
     --bg: #0a0a0a;
@@ -239,21 +241,7 @@
 
   button { cursor: pointer; }
 </style>
-<script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script>
-    tailwind.config = {
-        corePlugins: { preflight: false },
-        darkMode: "class",
-        theme: {
-            extend: {
-                colors: {
-                    brand: { 50:"#fffbeb",100:"#fef3c7",200:"#fde68a",300:"#fcd34d",400:"#f2c94c",500:"#f2c94c",600:"#d97706",700:"#b45309",800:"#92400e",900:"#78350f",950:"#451a03" },
-                    accent: { 400: "#f2c94c", 500: "#f2c94c", 600: "#d97706" }
-                }
-            }
-        }
-    }
-</script>
+<link rel="stylesheet" href="tailwind.css">
 </head>
 <body>
 
@@ -272,7 +260,7 @@
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-bold mb-2">
                     <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">ACCESS </span>
-                    <span class="bg-gradient-to-r from-brand-400 to-accent-400 bg-clip-text text-transparent">LOCKED</span>
+                    <span style="color: var(--yellow)">LOCKED</span>
                 </h2>
                 <p class="text-gray-500 text-sm max-w-xs mx-auto">Complete all tasks below to unlock the hub</p>
             </div>
@@ -382,7 +370,7 @@
                   </div>
                   <div class="flex items-center justify-between">
                       <div class="flex items-center gap-1 text-[#f2c94c] text-sm">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="text-gray-500 ml-1">(3.8k)</span></div>
-                      <button class="bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] px-4 py-2 rounded-lg font-bold text-sm transition-colors copy-btn" data-script="loadstring(game:HttpGet('https://raw.githubusercontent.com/Reign-Scripts/Murder-Mystery-2/refs/heads/main/over-drive-hub'))()">Copy Script</button>
+                      <button class="bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] px-4 py-2 rounded-lg font-bold text-sm transition-colors copy-btn" data-script="loadstring(game:HttpGet('https://raw.githubusercontent.com/Reign-Scripts/Murder-Mystery-2/305a4668d11c526667e77d4b84753ef904becb77/over-drive-hub'))()">Copy Script</button>
                   </div>
               </div>
           </div>
@@ -414,14 +402,13 @@
                   </div>
                   <div class="flex items-center justify-between">
                       <div class="flex items-center gap-1 text-[#f2c94c] text-sm">&#9733;&#9733;&#9733;&#9733;&#9733; <span class="text-gray-500 ml-1">(1.2k)</span></div>
-                      <button class="bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] px-4 py-2 rounded-lg font-bold text-sm transition-colors copy-btn" data-script="loadstring(game:HttpGet('https://raw.githubusercontent.com/Reign-Scripts/Murder-Mystery-2/refs/heads/main/lua'))()">Copy Script</button>
+                      <button class="bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] px-4 py-2 rounded-lg font-bold text-sm transition-colors copy-btn" data-script="loadstring(game:HttpGet('https://raw.githubusercontent.com/Reign-Scripts/Murder-Mystery-2/305a4668d11c526667e77d4b84753ef904becb77/lua'))()">Copy Script</button>
                   </div>
               </div>
           </div>
       </div>
   </div>
 </section>
-
 <section class="section" id="features">
   <div class="section-head reveal-on-scroll">
     <div class="eyebrow">Why Choose Us</div>
@@ -509,116 +496,24 @@
   </div>
 </div>
 
-<footer>&#169; 2026 Reign Scripts. Not affiliated with Roblox Corporation.</footer>
+
+  <div class="text-xs text-gray-500 max-w-xl mx-auto mb-4 text-center">
+    <strong>Privacy Notice:</strong> Analytics starts only after opt-in. The site records an aggregate visit event. The site sends daily aggregate visit totals to a private Discord channel. The analytics feature does not send individual visitor IP addresses or device fingerprints to Discord. IPs are processed temporarily only for rate-limiting anti-abuse protection.
+  </div>
+  <footer>
+&#169; 2026 Reign Scripts. Not affiliated with Roblox Corporation.</footer>
 
 </div>
 <script src="checkpoint.js"></script>
 <script src="logger.js"></script>
 <script src="app.js"></script>
 
-<div id="toast" style="position:fixed; bottom:24px; right:24px; z-index:100; transform:translateY(20px); opacity:0; pointer-events:none; transition:all 0.5s ease; background:#111; border:1px solid var(--green); padding:12px 20px; border-radius:12px; color:var(--text); font-size:14px; display:flex; align-items:center; gap:8px;">
+<div id="toast">
   <span style="color:var(--green)">&#10003;</span> Script copied to clipboard!
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    // Nav slide logic
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        const header = document.querySelector('header');
-        if (currentScroll > lastScroll && currentScroll > 50) {
-            header.classList.add('nav-hidden');
-        } else {
-            header.classList.remove('nav-hidden');
-        }
-        lastScroll = currentScroll;
-    });
-
-    // Reveal on scroll logic
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    revealElements.forEach(el => revealObserver.observe(el));
-
-    // Copy script logic
-    const copyBtns = document.querySelectorAll(".copy-btn");
-    copyBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const script = btn.dataset.script;
-            navigator.clipboard.writeText(script).then(() => {
-                const originalText = btn.textContent;
-                btn.textContent = "Copied!";
-                showToast();
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            }).catch(() => {
-                const textarea = document.createElement("textarea");
-                textarea.value = script;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand("copy");
-                document.body.removeChild(textarea);
-                const originalText = btn.textContent;
-                btn.textContent = "Copied!";
-                showToast();
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            });
-        });
-    });
-    function showToast() {
-        const toast = document.getElementById("toast");
-        toast.style.transform = "translateY(0)";
-        toast.style.opacity = "1";
-        setTimeout(() => {
-            toast.style.transform = "translateY(20px)";
-            toast.style.opacity = "0";
-        }, 2500);
-    }
-
-    // FAQ logic
-    const faqQuestions = document.querySelectorAll('.faq-q');
-    faqQuestions.forEach(q => {
-        q.addEventListener('click', () => {
-            const item = q.parentElement;
-            item.classList.toggle('open');
-        });
-    });
-
-    // Navbar highlighting logic
-    const sections = document.querySelectorAll('section[id], .hero');
-    const navLinks = document.querySelectorAll('nav a');
-    
-    const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                let id = entry.target.getAttribute('id');
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    let href = link.getAttribute('href');
-                    if (id && href === '#' + id) {
-                        link.classList.add('active');
-                    } else if (!id && href === '#') {
-                        // The .hero section corresponds to "Home" (#)
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    }, { threshold: 0.2, rootMargin: "-10% 0px -50% 0px" });
-
-    sections.forEach(sec => navObserver.observe(sec));
-});
-</script>
+<script src="main.js"></script>
 
 </body>
 </html>
+<!-- CodeRabbit trigger -->

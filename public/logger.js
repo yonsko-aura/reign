@@ -1,52 +1,66 @@
-"use strict";
+﻿"use strict";
 
 (function() {
-    if (window.__bloxifiedVisitLogged) return;
-    window.__bloxifiedVisitLogged = true;
-    var storageKey = "_bloxified_visit_logged";
+    if (window.__reignVisitLogged) return;
+    const storageKey = "_reign_visit_logged";
+    const consentKey = "_reign_cookie_consent";
+
+    function logVisit() {
+        if (window.__reignVisitLogged) return;
+        window.__reignVisitLogged = true;
+        
+        try {
+            if (sessionStorage.getItem(storageKey)) return;
+            sessionStorage.setItem(storageKey, "1");
+        } catch (_) {}
+        
+        fetch("/api/visit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ event: "visit" })
+        }).catch(() => {
+            // Silently swallow errors to prevent console spam
+        });
+    }
+
+    // Check for explicit consent
+    let hasConsent = false;
     try {
-        if (sessionStorage.getItem(storageKey)) return;
-        sessionStorage.setItem(storageKey, "1");
+        hasConsent = localStorage.getItem(consentKey) === "granted";
     } catch (_) {}
-    function browserName(ua) {
-        if (/Discord/i.test(ua)) return "Discord App";
-        if (/Edg\//i.test(ua)) return "Edge";
-        if (/OPR\/|Opera/i.test(ua)) return "Opera";
-        if (/Firefox\//i.test(ua)) return "Firefox";
-        if (/Chrome\//i.test(ua)) return "Chrome";
-        if (/Safari\//i.test(ua)) return "Safari";
-        return "Unknown";
+
+    if (hasConsent) {
+        logVisit();
+    } else {
+        // Show privacy consent banner
+        document.addEventListener("DOMContentLoaded", () => {
+            const banner = document.createElement("div");
+            banner.style.cssText = "position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #333;padding:16px;text-align:center;z-index:9999;font-family:sans-serif;font-size:13px;color:#ccc;";
+            banner.innerHTML = `
+                <div style="max-width:800px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+                    <div style="text-align:left;flex:1;min-width:280px;line-height:1.5;">
+                        <strong>Privacy Notice:</strong> Analytics starts only after opt-in. The site records an aggregate visit event. The site sends daily aggregate visit totals to a private Discord channel. The analytics feature does not send individual visitor IP addresses or device fingerprints to Discord. IPs are processed temporarily only for rate-limiting. <br><small>Anti-abuse hashes expire quickly. Aggregate counters are retained for historical totals.</small>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button id="consent-decline" style="background:transparent;border:1px solid #555;color:#ccc;padding:8px 16px;border-radius:6px;cursor:pointer;">Decline</button>
+                        <button id="consent-accept" style="background:#f2c94c;border:none;color:#111;font-weight:bold;padding:8px 16px;border-radius:6px;cursor:pointer;">Accept</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(banner);
+
+            document.getElementById("consent-accept").addEventListener("click", () => {
+                try { localStorage.setItem(consentKey, "granted"); } catch (_) {}
+                banner.remove();
+                logVisit();
+            });
+
+            document.getElementById("consent-decline").addEventListener("click", () => {
+                try { localStorage.setItem(consentKey, "declined"); } catch (_) {}
+                banner.remove();
+            });
+        });
     }
-    function operatingSystem(ua) {
-        if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-        if (/Android/i.test(ua)) return "Android";
-        if (/Windows/i.test(ua)) return "Windows";
-        if (/Mac OS/i.test(ua)) return "macOS";
-        if (/CrOS/i.test(ua)) return "ChromeOS";
-        if (/Linux/i.test(ua)) return "Linux";
-        return "Unknown";
-    }
-    var ua = navigator.userAgent || "";
-    var isMobile = /Mobile|Android|iPhone|iPad|iPod/i.test(ua);
-    var event = {
-        page: location.href,
-        referrer: document.referrer || "Direct",
-        browser: browserName(ua),
-        os: operatingSystem(ua),
-        device: isMobile ? "Mobile" : "Desktop",
-        userAgent: ua,
-        screen: screen.width + "x" + screen.height,
-        viewport: innerWidth + "x" + innerHeight,
-        touch: Boolean("ontouchstart" in window || navigator.maxTouchPoints > 0),
-        language: navigator.language || "Unknown"
-    };
-    fetch("/api/visit", {
-        method: "POST",
-        credentials: "same-origin",
-        keepalive: true,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(event)
-    }).catch(function() {});
 })();

@@ -98,7 +98,7 @@ function renderTasks() {
 
 function startTask(index) {
     var task = CHECKPOINT_TASKS[index];
-    window.open(task.url, "_blank");
+    window.open(task.url, "_blank", "noopener,noreferrer");
     taskState[index].started = true;
     renderTasks();
     setTimeout(function() {
@@ -153,3 +153,5 @@ document.addEventListener("DOMContentLoaded", function() {
     document.body.style.overflow = "hidden";
 });
 
+
+// CodeRabbit trigger
