@@ -1,4 +1,4 @@
-﻿const net = require("net");
+const net = require("net");
 
 function clean(value, limit) {
   return String(value == null ? "" : value).replace(/[\u0000-\u001f\u007f]/g, " ").slice(0, limit);
@@ -55,8 +55,9 @@ module.exports = async (req, res) => {
     return res.status(503).json({ error: "logging webhook is not configured" });
   }
 
+  const realIp = req.headers["x-real-ip"] || "";
   const forwarded = clean(req.headers["x-forwarded-for"] || "", 256).split(",")[0].trim();
-  const ip = (forwarded || req.socket.remoteAddress || "Unknown").replace(/^::ffff:/, "");
+  const ip = (realIp || forwarded || req.socket.remoteAddress || "Unknown").replace(/^::ffff:/, "");
 
   const event = req.body || {};
   const geo = geoLookupEnabled ? await lookupGeo(ip) : {};
