@@ -1,11 +1,11 @@
-﻿const CHECKPOINT_TASKS = [ {
+const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
 }, {
     type: "tiktok",
     label: "Follow on TikTok",
-    url: "https://www.tiktok.com/@reignscripts"
+    url: "https://www.tiktok.com/@reignscripts1"
 } ];
 
 const COOLDOWN_MS = 1e4;
