@@ -200,7 +200,16 @@
     display:flex; align-items:center; justify-content:space-between;
     padding: 15px 18px; font-size:14px; font-weight:600; cursor:pointer;
   }
-  .faq-q .chev{ color: var(--yellow); font-size:12px; }
+  .faq-q .chev{ color: var(--yellow); font-size:12px; transition: transform 0.3s ease; }
+  .faq-a{
+    padding: 0 18px; max-height: 0; overflow: hidden; font-size: 13px; color: var(--text-dim); transition: all 0.3s ease;
+  }
+  .faq-item.open .faq-a{
+    padding: 0 18px 15px; max-height: 200px;
+  }
+  .faq-item.open .chev{
+    transform: rotate(180deg);
+  }
 
   .cta-band{
     max-width: 1000px; margin: 0 auto 64px; padding: 20px;
@@ -470,10 +479,22 @@
     <h2 class="section-title">Got questions?</h2>
   </div>
   <div class="reveal-on-scroll">
-    <div class="faq-item"><div class="faq-q">What executor should I use? <span class="chev">&#9662;</span></div></div>
-    <div class="faq-item"><div class="faq-q">Are the scripts safe to use? <span class="chev">&#9662;</span></div></div>
-    <div class="faq-item"><div class="faq-q">How do I get Premium scripts? <span class="chev">&#9662;</span></div></div>
-    <div class="faq-item"><div class="faq-q">Script not working after update? <span class="chev">&#9662;</span></div></div>
+    <div class="faq-item">
+      <div class="faq-q">What executor should I use? <span class="chev">&#9662;</span></div>
+      <div class="faq-a">We recommend Synapse X, Script-Ware, or Fluxus. Our scripts are optimized for all major executors with Level 7+ capabilities.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Are the scripts safe to use? <span class="chev">&#9662;</span></div>
+      <div class="faq-a">All scripts are tested extensively before release. We use advanced obfuscation and anti-detection to keep you safe. Zero malware, zero data collection.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I get Premium scripts? <span class="chev">&#9662;</span></div>
+      <div class="faq-a">Join our Discord server and check the #premium channel. We offer lifetime keys and monthly subscriptions at affordable prices.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Script not working after update? <span class="chev">&#9662;</span></div>
+      <div class="faq-a">Re-execute the loadstring &mdash; our scripts auto-update. If still broken, check the Status page or Discord for announcements. Patches usually drop within 7-10 days.</div>
+    </div>
   </div>
 </section>
 
@@ -561,6 +582,39 @@ document.addEventListener("DOMContentLoaded", () => {
             toast.style.opacity = "0";
         }, 2500);
     }
+
+    // FAQ logic
+    const faqQuestions = document.querySelectorAll('.faq-q');
+    faqQuestions.forEach(q => {
+        q.addEventListener('click', () => {
+            const item = q.parentElement;
+            item.classList.toggle('open');
+        });
+    });
+
+    // Navbar highlighting logic
+    const sections = document.querySelectorAll('section[id], .hero');
+    const navLinks = document.querySelectorAll('nav a');
+    
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                let id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    let href = link.getAttribute('href');
+                    if (id && href === '#' + id) {
+                        link.classList.add('active');
+                    } else if (!id && href === '#') {
+                        // The .hero section corresponds to "Home" (#)
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.2, rootMargin: "-10% 0px -50% 0px" });
+
+    sections.forEach(sec => navObserver.observe(sec));
 });
 </script>
 
