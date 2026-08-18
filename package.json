@@ -1,11 +1,6 @@
-{
-  "name": "reign2",
+﻿{
+  "name": "reign-scripts",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
-  },
-  "dependencies": {}
+  "private": true,
+  "scripts": {}
 }
