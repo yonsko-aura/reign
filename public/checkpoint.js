@@ -1,11 +1,11 @@
-const CHECKPOINT_TASKS = [ {
+﻿const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
 }, {
-    type: "like",
-    label: "Like the Video",
-    url: "https://youtu.be/MkNeFsEvLsc?si=OBU3K0Rr1IgknnYF"
+    type: "tiktok",
+    label: "Follow on TikTok",
+    url: "https://www.tiktok.com/@reignscripts"
 } ];
 
 const COOLDOWN_MS = 1e4;
@@ -41,7 +41,7 @@ function renderTasks() {
         html += '">';
         html += '<div class="p-4 sm:p-5">';
         html += '<div class="flex items-center gap-3 mb-4">';
-        html += "<div class=\"w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold font-['Orbitron'] flex-shrink-0 ";
+        html += "<div class=\"w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold  flex-shrink-0 ";
         if (state.done) {
             html += 'bg-green-500/20 text-green-400 border border-green-500/30">';
             html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
@@ -51,10 +51,10 @@ function renderTasks() {
         }
         html += "</div>";
         html += '<div class="flex-1 min-w-0">';
-        html += "<h4 class=\"text-sm sm:text-base font-semibold font-['Inter'] truncate ";
+        html += "<h4 class=\"text-sm sm:text-base font-semibold  truncate ";
         html += state.done ? "text-green-400" : "text-gray-200";
         html += '">' + task.label + "</h4>";
-        html += "<p class=\"text-[11px] sm:text-xs text-gray-600 font-['Inter'] mt-0.5\">";
+        html += "<p class=\"text-[11px] sm:text-xs text-gray-600  mt-0.5\">";
         html += task.type === "subscribe" ? "YouTube Channel" : (task.type === "tiktok" ? "TikTok Account" : "Link");
         html += "</p>";
         html += "</div>";
@@ -67,17 +67,17 @@ function renderTasks() {
         }
         html += "</div>";
         if (state.done) {
-            html += "<div class=\"w-full py-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-semibold font-['Inter'] flex items-center justify-center gap-2\">";
+            html += "<div class=\"w-full py-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-semibold  flex items-center justify-center gap-2\">";
             html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
             html += "Completed";
             html += "</div>";
         } else if (state.started) {
-            html += "<div class=\"w-full py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-gray-500 text-sm font-semibold font-['Inter'] flex items-center justify-center gap-3 cursor-not-allowed\">";
+            html += "<div class=\"w-full py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-gray-500 text-sm font-semibold  flex items-center justify-center gap-3 cursor-not-allowed\">";
             html += '<div class="cp-spinner"></div>';
             html += "Verifying...";
             html += "</div>";
         } else {
-            html += '<button onclick="startTask(' + i + ")\" class=\"w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold font-['Inter'] flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ";
+            html += '<button onclick="startTask(' + i + ")\" class=\"w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold  flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ";
             if (task.type === "subscribe" || task.type === "like") {
                 html += 'from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40">';
             } else if (task.type === "tiktok") {
@@ -152,3 +152,4 @@ document.addEventListener("DOMContentLoaded", function() {
     renderTasks();
     document.body.style.overflow = "hidden";
 });
+
