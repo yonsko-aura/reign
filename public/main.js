@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
     // Nav slide logic
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             navigator.clipboard.writeText(script).then(() => {
                 const originalText = btn.textContent;
                 btn.textContent = "Copied!";
-                showToast();
+                
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.body.removeChild(textarea);
                 const originalText = btn.textContent;
                 btn.textContent = "Copied!";
-                showToast();
+                
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);

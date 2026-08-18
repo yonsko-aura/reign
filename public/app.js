@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
     let particles = [];
@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
             navigator.clipboard.writeText(script).then(() => {
                 btn.textContent = "Copied!";
                 btn.classList.add("copied");
-                showToast();
+                
                 setTimeout(() => {
                     btn.textContent = "Copy Script";
                     btn.classList.remove("copied");
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.body.removeChild(textarea);
                 btn.textContent = "Copied!";
                 btn.classList.add("copied");
-                showToast();
+                
                 setTimeout(() => {
                     btn.textContent = "Copy Script";
                     btn.classList.remove("copied");
@@ -282,83 +282,83 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const testimonials = [ {
         name: "James Mitchell",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Best script loader I've ever used. Execution is instant and never fails."
     }, {
         name: "Sarah Chen",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Finally a reliable script hub. The auto-update feature is a lifesaver."
     }, {
         name: "Marcus Johnson",
-        stars: "★★★★☆",
+        stars: "â˜…â˜…â˜…â˜…â˜†",
         text: "Very solid script collection. Only 4 stars because the UI could be more intuitive."
     }, {
         name: "Emily Rodriguez",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Scripts load flawlessly every single time. Zero crashes so far."
     }, {
         name: "David Kim",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Been using this for months now. Most stable scripts I've found."
     }, {
         name: "Rachel Thompson",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "The script optimizer made my games run so much smoother. Absolutely love it."
     }, {
         name: "Michael O'Brien",
-        stars: "★★★★☆",
+        stars: "â˜…â˜…â˜…â˜…â˜†",
         text: "Great scripts overall. Sometimes takes a second to load but worth the wait."
     }, {
         name: "Jessica Park",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Hands down the best script repository. The anti-detection is top tier."
     }, {
         name: "Daniel Wright",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Clean code, fast execution, and constant updates. Couldn't ask for more."
     }, {
         name: "Amanda Foster",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "The script hub I've been searching for. Everything works as advertised."
     }, {
         name: "Brian Taylor",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Frequent updates and new scripts added weekly. Incredible service."
     }, {
         name: "Michelle Lee",
-        stars: "★★★★☆",
+        stars: "â˜…â˜…â˜…â˜…â˜†",
         text: "Love the variety. Some scripts need better documentation but overall amazing."
     }, {
         name: "Kevin Martinez",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Worth every penny. The scripts are optimized perfectly."
     }, {
         name: "Lauren Scott",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Saved me so much time. Execution is lightning fast."
     }, {
         name: "Christopher Evans",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Most reliable scripts I've ever used. Highly recommended."
     }, {
         name: "Ashley Rivera",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "The UI is gorgeous and the scripts perform flawlessly."
     }, {
         name: "Thomas Baker",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Script library is massive and growing every day. Love it."
     }, {
         name: "Nicole Adams",
-        stars: "★★★★☆",
+        stars: "â˜…â˜…â˜…â˜…â˜†",
         text: "Great execution speed. Would love to see more AI-powered scripts soon."
     }, {
         name: "Robert Hayes",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Best investment for my gaming setup. Scripts are top quality."
     }, {
         name: "Stephanie Cruz",
-        stars: "★★★★★",
+        stars: "â˜…â˜…â˜…â˜…â˜…",
         text: "Zero issues so far. The automatic script injection is seamless."
     } ];
     const testiWidget = document.getElementById("live-testimonial");
