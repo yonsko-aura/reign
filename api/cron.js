@@ -10,7 +10,7 @@
      return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const webhookUrl = "https://discord.com/api/webhooks/1496200016077783202/fIykh9SEd48dh7zHWi2hthVQweySmUG4o3Z1YkFEVZn0KpTIIslN_VGaAqNIn8plgH2b";
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
   const kvUrl = process.env.KV_REST_API_URL;
   const kvToken = process.env.KV_REST_API_TOKEN;
 
