@@ -1,31 +1,34 @@
-const CHECKPOINT_TASKS = [ {
-    type: "subscribe",
-    label: "Subscribe to Reign Scripts",
-    url: "https://www.youtube.com/@reignscripts"
-}, {
-    type: "tiktok",
-    label: "Follow on TikTok",
-    url: "https://www.tiktok.com/@reignscripts1"
-} ];
-
-const COOLDOWN_MS = 1e4;
+﻿const CHECKPOINT_TASKS = [
+    {
+        type: 'subscribe',
+        label: 'Subscribe on YouTube',
+        sub: '@reignscripts',
+        url: 'https://www.youtube.com/@reignscripts'
+    },
+    {
+        type: 'tiktok',
+        label: 'Follow on TikTok',
+        sub: '@reignscripts1',
+        url: 'https://www.tiktok.com/@reignscripts1'
+    }
+];
 
 const taskState = CHECKPOINT_TASKS.map(() => ({
     started: false,
-    done: false
+    done: false,
+    completionTime: 0
 }));
 
 function getIcon(type) {
-    if (type === "subscribe" || type === "like") {
-        return `<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>`;
+    if (type === 'subscribe' || type === 'like') {
+        return '<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4-8 4z"/></svg>';
     }
-    if (type === "tiktok") {
-        return `<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`;
+    if (type === 'tiktok') {
+        return '<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>';
     }
-    return `<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>`;
+    return '<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>';
 }
 
-// Run a persistent interval to check for task completion using real-world time (bypasses background tab freezing)
 setInterval(function() {
     var changed = false;
     for (var i = 0; i < taskState.length; i++) {
@@ -45,8 +48,6 @@ setInterval(function() {
 function startTask(index) {
     var task = CHECKPOINT_TASKS[index];
     try { window.open(task.url, "_blank", "noopener,noreferrer"); } catch(e) {}
-    
-    // Set completion time to exactly 20 seconds from now (real world time)
     taskState[index].completionTime = Date.now() + 20000; 
     taskState[index].started = true;
     renderTasks();
@@ -60,72 +61,55 @@ function renderTasks() {
         var state = taskState[i];
         var stepNum = i + 1;
         
-        var title = task.type === 'subscribe' ? 'Subscribe on YouTube' : 'Follow on TikTok';
-        var sub = task.type === 'subscribe' ? '@reignscripts' : '@reignscripts1';
+        var iconColor = task.type === 'subscribe' ? '#ef4444' : '#e4e4e7';
+        var iconBg = task.type === 'subscribe' ? 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05))' : 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))';
+        var iconBorder = task.type === 'subscribe' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.1)';
         
-        html += '<div id="cp-task-' + i + '" class="group relative rounded-2xl border transition-all duration-500 ';
-        if (state.done) {
-            html += 'border-green-500/30 bg-green-500/[0.03]';
-        } else {
-            html += 'border-white/[0.06] bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]';
-        }
-        html += '">';
-        html += '<div class="p-4 sm:p-5">';
-        html += '<div class="flex items-center gap-3 mb-4">';
-        html += '<div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 ';
-        if (state.done) {
-            html += 'bg-green-500/20 text-green-400 border border-green-500/30">';
-            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
-        } else {
-            html += 'bg-white/[0.06] text-gray-500 border border-white/[0.08]">';
-            html += stepNum;
-        }
-        html += '</div>';
-        html += '<div class="flex-1 min-w-0">';
-        html += '<h4 class="text-sm sm:text-base font-semibold truncate ';
-        html += state.done ? 'text-green-400' : 'text-gray-200';
-        html += '">' + title + '</h4>';
-        html += '<p class="text-[11px] sm:text-xs text-gray-600 mt-0.5">';
-        html += sub;
-        html += '</p>';
-        html += '</div>';
-        if (state.done) {
-            html += '<span class="px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] sm:text-xs font-bold flex-shrink-0">DONE</span>';
-        } else if (state.started) {
-            html += '<span class="px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[10px] sm:text-xs font-bold flex-shrink-0 animate-pulse">VERIFYING</span>';
-        } else {
-            html += '<span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-600 text-[10px] sm:text-xs font-bold flex-shrink-0">PENDING</span>';
-        }
+        var btnDefaultBg = task.type === 'subscribe' ? 'linear-gradient(to right, #dc2626, #ef4444)' : 'linear-gradient(to right, #27272a, #18181b)';
+        var btnHoverBg = task.type === 'subscribe' ? 'linear-gradient(to right, #ef4444, #f87171)' : 'linear-gradient(to right, #3f3f46, #27272a)';
+        var btnBorder = task.type === 'subscribe' ? 'none' : '1px solid rgba(255,255,255,0.1)';
+        var btnShadow = task.type === 'subscribe' ? '0 10px 15px -3px rgba(239, 68, 68, 0.2)' : '0 10px 15px -3px rgba(0,0,0,0.5)';
+        
+        html += '<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); width: 100%; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;">';
+        
+        html += '<div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #71717a; font-weight: 700; flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05);">' + stepNum + '</div>';
+        
+        // Icon
+        html += '<div style="width: 36px; height: 36px; border-radius: 10px; background: ' + iconBg + '; border: 1px solid ' + iconBorder + '; color: ' + iconColor + '; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);">';
+        html += getIcon(task.type);
         html += '</div>';
         
-        if (state.done) {
-            html += '<div class="w-full py-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-semibold flex items-center justify-center gap-2">';
-            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
-            html += 'Completed';
-            html += '</div>';
-        } else if (state.started) {
-            html += '<div class="w-full py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-gray-500 text-sm font-semibold flex items-center justify-center gap-3 cursor-not-allowed">';
-            html += '<div class="cp-spinner"></div>';
-            html += 'Verifying... (Wait 20s)';
-            html += '</div>';
-        } else {
-            html += '<button onclick="startTask(' + i + ')" class="w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ';
-            if (task.type === "subscribe" || task.type === "like") {
-                html += 'from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40">';
-            } else if (task.type === "tiktok") {
-                html += 'from-slate-900 to-black hover:from-slate-800 hover:to-slate-900 text-white shadow-lg shadow-black/20 hover:shadow-black/40" >';
-            } else {
-                html += 'from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">';
-            }
-            html += getIcon(task.type);
-            html += title;
-            html += '</button>';
-        }
+        // Text
+        html += '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">';
+        html += '<div style="font-size: 13px; font-weight: 600; color: #f4f4f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; letter-spacing: -0.01em;">' + task.label + '</div>';
+        html += '<div style="font-size: 11px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; margin-top: 2px;">' + task.sub + '</div>';
         html += '</div>';
+        
+        // Button - USING COMPACT BUTTONS TO FIX RECTANGLE ISSUE
+        if (state.done) {
+            html += '<button style="padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.1); font-size: 10px; font-weight: 700; color: #4ade80; cursor: default; flex-shrink: 0; letter-spacing: 0.5px;">DONE</button>';
+        } else if (state.started) {
+            html += '<button style="padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); font-size: 10px; font-weight: 700; color: #a1a1aa; cursor: wait; flex-shrink: 0; letter-spacing: 0.5px;">VERIFYING...</button>';
+        } else {
+            var btnStyle = "padding: 6px 14px; border-radius: 20px; border: " + btnBorder + "; background: " + btnDefaultBg + "; font-size: 10px; font-weight: 700; color: #ffffff; cursor: pointer; transition: all 0.2s ease-out; box-shadow: " + btnShadow + "; flex-shrink: 0; transform: translateY(0); letter-spacing: 0.5px;";
+            var onOver = "this.style.background='" + btnHoverBg + "'; this.style.transform='translateY(-1px)';";
+            var onOut = "this.style.background='" + btnDefaultBg + "'; this.style.transform='translateY(0)';";
+            html += '<button onclick="startTask(' + i + ')" style="' + btnStyle + '" onmouseover="' + onOver + '" onmouseout="' + onOut + '">VERIFY</button>';
+        }
+        
         html += '</div>';
     }
     container.innerHTML = html;
     updateProgress();
+}
+
+function updateProgress() {
+    var doneCount = 0;
+    for (var i = 0; i < taskState.length; i++) {
+        if (taskState[i].done) doneCount++;
+    }
+    var el = document.getElementById("cp-progress-text");
+    if (el) el.innerText = doneCount + " / " + CHECKPOINT_TASKS.length;
 }
 
 function checkAllDone() {
@@ -144,70 +128,37 @@ function checkAllDone() {
             btn.style.border = "none";
             btn.style.cursor = "pointer";
             btn.style.boxShadow = "inset 0 2px 4px rgba(255,255,255,0.3), 0 12px 24px -8px rgba(242,201,76,0.5)";
-            btn.innerHTML = "Unlock Hub";
+            btn.innerHTML = "Hub Unlocked!";
             btn.onclick = unlockSite;
         }
         var pill = document.getElementById("cp-status-pill");
         if (pill) {
             pill.style.background = "rgba(34,197,94,0.1)";
-            pill.style.borderColor = "rgba(34,197,94,0.2)";
+            pill.style.border = "1px solid rgba(34,197,94,0.3)";
             pill.style.color = "#4ade80";
-            pill.style.boxShadow = "inset 0 1px 2px rgba(255,255,255,0.1)";
-            pill.innerHTML = '<svg style="width: 12px; height: 12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ACCESS GRANTED';
+            pill.innerHTML = '<svg style="width: 12px; height: 12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>ACCESS GRANTED';
         }
+        
+        // AUTO UNLOCK
+        setTimeout(unlockSite, 500);
     }
 }
 
 function unlockSite() {
-    
     var overlay = document.getElementById("checkpoint-overlay");
     var mainSite = document.getElementById("main-site");
-    overlay.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-    overlay.style.opacity = "0";
-    overlay.style.transform = "scale(1.02)";
-    setTimeout(function() {
-        overlay.style.display = "none";
-        mainSite.classList.remove("hidden");
-        document.body.style.overflow = "";
-        window.scrollTo(0, 0);
-    }, 600);
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-});
-
-
-// CodeRabbit trigger
-
-
-window.isPreviewMode = false;
-
-function skipCheckpoint() {
-    window.isPreviewMode = true;
-    document.getElementById("checkpoint-overlay").classList.add("opacity-0", "pointer-events-none");
-    setTimeout(function() {
-        document.getElementById("checkpoint-overlay").classList.add("hidden");
-        document.getElementById("main-site").classList.remove("hidden");
-        document.body.style.overflow = "auto";
-    }, 500);
-}
-
-function enforceCheckpoint(e) {
-    if (window.isPreviewMode) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Show checkpoint again
-        document.getElementById("checkpoint-overlay").classList.remove("hidden");
-        // tiny delay to allow display:block to apply before animating opacity
+    if (overlay) {
+        overlay.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        overlay.style.opacity = "0";
+        overlay.style.transform = "scale(1.02)";
         setTimeout(function() {
-            document.getElementById("checkpoint-overlay").classList.remove("opacity-0", "pointer-events-none");
-            document.body.style.overflow = "hidden";
-        }, 10);
-        return false;
+            overlay.style.display = "none";
+            if (mainSite) mainSite.classList.remove("hidden");
+            document.body.style.overflow = "";
+            window.scrollTo(0, 0);
+        }, 600);
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     renderTasks();
@@ -216,3 +167,33 @@ document.addEventListener("DOMContentLoaded", function() {
         document.body.style.overflow = "hidden";
     }
 });
+
+window.isPreviewMode = false;
+
+window.skipCheckpoint = function() {
+    window.isPreviewMode = true;
+    var overlay = document.getElementById("checkpoint-overlay");
+    if (overlay) {
+        overlay.style.transition = "opacity 0.6s ease";
+        overlay.style.opacity = "0";
+        setTimeout(function() {
+            overlay.style.display = "none";
+            document.body.style.overflow = "";
+        }, 600);
+    }
+};
+
+window.enforceCheckpoint = function(e) {
+    if (window.isPreviewMode) {
+        e.preventDefault();
+        e.stopPropagation();
+        var overlay = document.getElementById("checkpoint-overlay");
+        if (overlay) {
+            overlay.style.display = "flex";
+            overlay.style.opacity = "1";
+            document.body.style.overflow = "hidden";
+        }
+        window.isPreviewMode = false;
+        return false;
+    }
+};
