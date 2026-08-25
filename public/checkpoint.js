@@ -1,4 +1,4 @@
-﻿const CHECKPOINT_TASKS = [ {
+const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
@@ -44,8 +44,8 @@ function renderTasks() {
         
         // Text
         html += '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">';
-        html += '<div style="font-size: 13px; font-weight: 600; color: #f4f4f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: ''Inter'', sans-serif; letter-spacing: -0.01em;">' + task.label + '</div>';
-        html += '<div style="font-size: 11px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: ''Inter'', sans-serif; margin-top: 2px;">' + (task.type === 'subscribe' ? 'Reign Scripts channel' : '@reignscripts') + '</div>';
+        html += '<div style="font-size: 13px; font-weight: 600; color: #f4f4f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; letter-spacing: -0.01em;">' + task.label + '</div>';
+        html += '<div style="font-size: 11px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; margin-top: 2px;">' + (task.type === 'subscribe' ? 'Reign Scripts channel' : '@reignscripts') + '</div>';
         html += '</div>';
         
         // Button
@@ -54,36 +54,13 @@ function renderTasks() {
         } else if (state.started) {
             html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-size: 12px; font-weight: 700; color: #a1a1aa; cursor: wait;">...</button>';
         } else {
-            html += '<button onclick="startTask(' + i + ')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-size: 12px; font-weight: 600; color: #e4e4e7; cursor: pointer; transition: all 0.2s; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);" onmouseover="this.style.background=''rgba(255,255,255,0.08)''; this.style.color=''#fff''" onmouseout="this.style.background=''rgba(255,255,255,0.03)''; this.style.color=''#e4e4e7''">Verify</button>';
+            html += '<button onclick="startTask(' + i + ')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-size: 12px; font-weight: 600; color: #e4e4e7; cursor: pointer; transition: all 0.2s; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);" onmouseover="this.style.background=\'rgba(255,255,255,0.08)\'; this.style.color=\'#fff\'" onmouseout="this.style.background=\'rgba(255,255,255,0.03)\'; this.style.color=\'#e4e4e7\'">Verify</button>';
         }
         
         html += '</div>';
     }
     container.innerHTML = html;
     updateProgress();
-}
-
-function startTask(index) {
-    var task = CHECKPOINT_TASKS[index];
-    window.open(task.url, "_blank", "noopener,noreferrer");
-    taskState[index].started = true;
-    renderTasks();
-    setTimeout(function() {
-        taskState[index].done = true;
-        renderTasks();
-        checkAllDone();
-    }, COOLDOWN_MS);
-}
-
-function updateProgress() {
-    var done = 0;
-    for (var i = 0; i < taskState.length; i++) {
-        if (taskState[i].done) done++;
-    }
-    var total = CHECKPOINT_TASKS.length;
-    var pct = total > 0 ? Math.round(done / total * 100) : 0;
-    document.getElementById("cp-progress-text").textContent = done + " / " + total;
-    var pb = document.getElementById("cp-progress-bar"); if(pb) pb.style.width = pct + "%";
 }
 
 function checkAllDone() {
