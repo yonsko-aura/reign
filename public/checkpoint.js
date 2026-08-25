@@ -1,4 +1,4 @@
-﻿const CHECKPOINT_TASKS = [ {
+const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
@@ -109,7 +109,7 @@ function checkAllDone() {
 }
 
 function unlockSite() {
-    localStorage.setItem('checkpoint_unlocked', 'true');
+    
     var overlay = document.getElementById("checkpoint-overlay");
     var mainSite = document.getElementById("main-site");
     overlay.style.transition = "opacity 0.6s ease, transform 0.6s ease";
@@ -124,16 +124,6 @@ function unlockSite() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    if (localStorage.getItem('checkpoint_unlocked') === 'true') {
-        var overlay = document.getElementById("checkpoint-overlay");
-        var mainSite = document.getElementById("main-site");
-        if (overlay) overlay.style.display = "none";
-        if (mainSite) mainSite.classList.remove("hidden");
-        document.body.style.overflow = "";
-    } else {
-        renderTasks();
-        document.body.style.overflow = "hidden";
-    }
 });
 
 
