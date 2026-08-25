@@ -1,4 +1,4 @@
-const CHECKPOINT_TASKS = [ {
+﻿const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
@@ -33,27 +33,28 @@ function renderTasks() {
         var state = taskState[i];
         var stepNum = i + 1;
         
-        html += '<div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">';
-        html += '<div class="w-6 h-6 rounded bg-black/50 flex items-center justify-center text-[10px] text-gray-500 font-bold flex-shrink-0">' + stepNum + '</div>';
+        html += '<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); width: 100%; box-sizing: border-box;">';
+        
+        html += '<div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6b7280; font-weight: bold; flex-shrink: 0;">' + stepNum + '</div>';
         
         // Icon
-        html += '<div class="w-8 h-8 rounded-lg bg-[#f2c94c]/10 text-[#f2c94c] flex items-center justify-center flex-shrink-0">';
+        html += '<div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(242,201,76,0.1); color: #f2c94c; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">';
         html += getIcon(task.type);
         html += '</div>';
         
         // Text
-        html += '<div class="flex-1 min-w-0">';
-        html += '<div class="text-[13px] font-bold text-gray-200 truncate">' + task.label + '</div>';
-        html += '<div class="text-[11px] text-gray-500 truncate">' + (task.type === 'subscribe' ? 'Reign Scripts channel' : '@reignscripts') + '</div>';
+        html += '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">';
+        html += '<div style="font-size: 13px; font-weight: bold; color: #e5e7eb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: ''Inter'', sans-serif;">' + task.label + '</div>';
+        html += '<div style="font-size: 11px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: ''Inter'', sans-serif;">' + (task.type === 'subscribe' ? 'Reign Scripts channel' : '@reignscripts') + '</div>';
         html += '</div>';
         
         // Button
         if (state.done) {
-            html += '<button class="px-4 py-1.5 rounded-lg border border-green-500/30 bg-green-500/10 text-[11px] font-bold text-green-400 cursor-default">Done</button>';
+            html += '<button style="padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.1); font-size: 11px; font-weight: bold; color: #4ade80; cursor: default;">Done</button>';
         } else if (state.started) {
-            html += '<button class="px-4 py-1.5 rounded-lg border border-white/10 bg-white/5 text-[11px] font-bold text-gray-400 cursor-wait">...</button>';
+            html += '<button style="padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); font-size: 11px; font-weight: bold; color: #9ca3af; cursor: wait;">...</button>';
         } else {
-            html += '<button onclick="startTask(' + i + ')" class="px-4 py-1.5 rounded-lg border border-white/10 bg-[#262626] hover:bg-[#333] text-[11px] font-bold text-gray-300 transition-colors">Verify</button>';
+            html += '<button onclick="startTask(' + i + ')" style="padding: 6px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #262626; font-size: 11px; font-weight: bold; color: #d1d5db; cursor: pointer; transition: background 0.2s;">Verify</button>';
         }
         
         html += '</div>';
@@ -96,14 +97,19 @@ function checkAllDone() {
     if (allDone) {
         var btn = document.getElementById("cp-main-btn");
         if (btn) {
-            btn.className = "w-full py-3.5 rounded-xl bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-lg shadow-yellow-500/20";
+            btn.style.background = "#f2c94c";
+            btn.style.color = "#111";
+            btn.style.cursor = "pointer";
+            btn.style.boxShadow = "0 10px 15px -3px rgba(242,201,76,0.2)";
             btn.innerHTML = "Unlock Hub";
             btn.onclick = unlockSite;
         }
         var pill = document.getElementById("cp-status-pill");
         if (pill) {
-            pill.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 text-[10px] font-bold tracking-widest uppercase mb-4";
-            pill.innerHTML = '<svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ACCESS GRANTED';
+            pill.style.background = "rgba(34,197,94,0.1)";
+            pill.style.borderColor = "rgba(34,197,94,0.2)";
+            pill.style.color = "#22c55e";
+            pill.innerHTML = '<svg style="width: 12px; height: 12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ACCESS GRANTED';
         }
     }
 }
