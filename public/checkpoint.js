@@ -25,16 +25,31 @@ function getIcon(type) {
     return `<svg style="width: 18px; height: 18px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>`;
 }
 
+// Run a persistent interval to check for task completion using real-world time (bypasses background tab freezing)
+setInterval(function() {
+    var changed = false;
+    for (var i = 0; i < taskState.length; i++) {
+        if (taskState[i].started && !taskState[i].done && taskState[i].completionTime) {
+            if (Date.now() >= taskState[i].completionTime) {
+                taskState[i].done = true;
+                changed = true;
+            }
+        }
+    }
+    if (changed) {
+        renderTasks();
+        checkAllDone();
+    }
+}, 1000);
+
 function startTask(index) {
     var task = CHECKPOINT_TASKS[index];
     try { window.open(task.url, "_blank", "noopener,noreferrer"); } catch(e) {}
+    
+    // Set completion time to exactly 20 seconds from now (real world time)
+    taskState[index].completionTime = Date.now() + 20000; 
     taskState[index].started = true;
     renderTasks();
-    setTimeout(function() {
-        taskState[index].done = true;
-        renderTasks();
-        checkAllDone();
-    }, 20000); // 20 seconds timer
 }
 
 function renderTasks() {
