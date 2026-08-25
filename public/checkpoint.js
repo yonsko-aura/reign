@@ -1,4 +1,4 @@
-﻿const CHECKPOINT_TASKS = [
+const CHECKPOINT_TASKS = [
     {
         type: 'subscribe',
         label: 'Subscribe on YouTube',
@@ -138,9 +138,6 @@ function checkAllDone() {
             pill.style.color = "#4ade80";
             pill.innerHTML = '<svg style="width: 12px; height: 12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>ACCESS GRANTED';
         }
-        
-        // AUTO UNLOCK
-        setTimeout(unlockSite, 500);
     }
 }
 
