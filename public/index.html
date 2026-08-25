@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -245,8 +245,6 @@
 <link rel="stylesheet" href="tailwind.css">
 </head>
 <body>
-
-    <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto transition-opacity duration-500" style="backdrop-filter: blur(12px); background: rgba(0,0,0,0.7); font-family: 'Inter', sans-serif;">
     <style>
         @keyframes animate-aurora {
             0% { background-position: 50% 50%, 50% 50%; }
@@ -255,7 +253,7 @@
         .reign-aurora {
             --aurora: repeating-linear-gradient(100deg, #f2c94c 10%, #d4af37 15%, #f5d370 20%, #eab308 25%, #f2c94c 30%);
             --dark-gradient: repeating-linear-gradient(100deg, #09090b 0%, #09090b 7%, transparent 10%, transparent 12%, #09090b 16%);
-            position: absolute;
+            position: fixed; z-index: -1;
             inset: -20px;
             background-image: var(--dark-gradient), var(--aurora);
             background-size: 300% 200%;
@@ -269,9 +267,12 @@
         }
     </style>
     <!-- Animated Aurora Background -->
-    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div style="position: fixed; z-index: -1; inset: 0; overflow: hidden; pointer-events: none;">
         <div class="reign-aurora"></div>
     </div>
+
+    <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto transition-opacity duration-500" style="backdrop-filter: blur(12px); background: rgba(0,0,0,0.7); font-family: 'Inter', sans-serif;">
+
     
     <!-- Ultra-premium Aceternity-style card -->
     <div class="relative w-full mx-auto" style="max-width: 380px; background: linear-gradient(180deg, #18181b 0%, #09090b 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 32px 24px; display: flex; flex-direction: column; align-items: center; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 25px 50px -12px rgba(0,0,0,0.8); z-index: 10;">

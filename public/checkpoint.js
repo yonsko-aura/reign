@@ -1,4 +1,4 @@
-const CHECKPOINT_TASKS = [ {
+﻿const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
@@ -142,3 +142,12 @@ function enforceCheckpoint(e) {
         return false;
     }
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    renderTasks();
+    var overlay = document.getElementById("checkpoint-overlay");
+    if (overlay && !overlay.classList.contains("hidden")) {
+        document.body.style.overflow = "hidden";
+    }
+});
