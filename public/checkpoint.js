@@ -51,6 +51,12 @@ function renderTasks() {
         var iconBg = task.type === 'subscribe' ? 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05))' : 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))';
         var iconBorder = task.type === 'subscribe' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.1)';
         
+        // Define button styles specifically mimicking the first original file (gradient, shiny, hover effects)
+        var btnDefaultBg = task.type === 'subscribe' ? 'linear-gradient(to right, #dc2626, #ef4444)' : 'linear-gradient(to right, #27272a, #18181b)';
+        var btnHoverBg = task.type === 'subscribe' ? 'linear-gradient(to right, #ef4444, #f87171)' : 'linear-gradient(to right, #3f3f46, #27272a)';
+        var btnBorder = task.type === 'subscribe' ? 'none' : '1px solid rgba(255,255,255,0.1)';
+        var btnShadow = task.type === 'subscribe' ? '0 10px 15px -3px rgba(239, 68, 68, 0.2)' : '0 10px 15px -3px rgba(0,0,0,0.5)';
+        
         html += '<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); width: 100%; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;">';
         
         html += '<div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #71717a; font-weight: 700; flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05);">' + stepNum + '</div>';
@@ -68,11 +74,17 @@ function renderTasks() {
         
         // Button
         if (state.done) {
-            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.1); font-size: 12px; font-weight: 700; color: #4ade80; cursor: default; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); flex-shrink: 0;">Done</button>';
+            // Old completed style: bg-green-500/10 text-green-400
+            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.1); font-size: 12px; font-weight: 700; color: #4ade80; cursor: default; flex-shrink: 0;">Completed</button>';
         } else if (state.started) {
-            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-size: 12px; font-weight: 700; color: #a1a1aa; cursor: wait; flex-shrink: 0;">...</button>';
+            // Old verifying style: bg-yellow-500/10 text-yellow-400
+            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(234,179,8,0.3); background: rgba(234,179,8,0.1); font-size: 12px; font-weight: 700; color: #facc15; cursor: wait; flex-shrink: 0;">Verifying...</button>';
         } else {
-            html += '<button onclick="startTask(' + i + ')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); font-size: 12px; font-weight: 600; color: #e4e4e7; cursor: pointer; transition: all 0.2s; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05); flex-shrink: 0;" onmouseover="this.style.background=\'rgba(255,255,255,0.08)\'; this.style.color=\'#fff\'" onmouseout="this.style.background=\'rgba(255,255,255,0.03)\'; this.style.color=\'#e4e4e7\'">Verify</button>';
+            // The glorious old shiny gradient buttons
+            var btnStyle = "padding: 8px 16px; border-radius: 10px; border: " + btnBorder + "; background: " + btnDefaultBg + "; font-size: 12px; font-weight: 600; color: #ffffff; cursor: pointer; transition: all 0.2s ease-out; box-shadow: " + btnShadow + "; flex-shrink: 0; transform: translateY(0);";
+            var onOver = "this.style.background=\'" + btnHoverBg + "\'; this.style.transform=\'translateY(-2px)\';";
+            var onOut = "this.style.background=\'" + btnDefaultBg + "\'; this.style.transform=\'translateY(0)\';";
+            html += '<button onclick="startTask(' + i + ')" style="' + btnStyle + '" onmouseover="' + onOver + '" onmouseout="' + onOut + '">Verify</button>';
         }
         
         html += '</div>';
