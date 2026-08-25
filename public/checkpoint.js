@@ -1,4 +1,4 @@
-﻿const CHECKPOINT_TASKS = [ {
+const CHECKPOINT_TASKS = [ {
     type: "subscribe",
     label: "Subscribe to Reign Scripts",
     url: "https://www.youtube.com/@reignscripts"
@@ -27,14 +27,14 @@ function getIcon(type) {
 
 function startTask(index) {
     var task = CHECKPOINT_TASKS[index];
-    window.open(task.url, "_blank", "noopener,noreferrer");
+    try { window.open(task.url, "_blank", "noopener,noreferrer"); } catch(e) {}
     taskState[index].started = true;
     renderTasks();
     setTimeout(function() {
         taskState[index].done = true;
         renderTasks();
         checkAllDone();
-    }, 10000);
+    }, 20000); // 20 seconds timer
 }
 
 function renderTasks() {
@@ -47,46 +47,66 @@ function renderTasks() {
         
         var title = task.type === 'subscribe' ? 'Subscribe on YouTube' : 'Follow on TikTok';
         var sub = task.type === 'subscribe' ? '@reignscripts' : '@reignscripts1';
-        var iconColor = task.type === 'subscribe' ? '#ef4444' : '#e4e4e7';
-        var iconBg = task.type === 'subscribe' ? 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05))' : 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02))';
-        var iconBorder = task.type === 'subscribe' ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.1)';
         
-        // Define button styles specifically mimicking the first original file (gradient, shiny, hover effects)
-        var btnDefaultBg = task.type === 'subscribe' ? 'linear-gradient(to right, #dc2626, #ef4444)' : 'linear-gradient(to right, #27272a, #18181b)';
-        var btnHoverBg = task.type === 'subscribe' ? 'linear-gradient(to right, #ef4444, #f87171)' : 'linear-gradient(to right, #3f3f46, #27272a)';
-        var btnBorder = task.type === 'subscribe' ? 'none' : '1px solid rgba(255,255,255,0.1)';
-        var btnShadow = task.type === 'subscribe' ? '0 10px 15px -3px rgba(239, 68, 68, 0.2)' : '0 10px 15px -3px rgba(0,0,0,0.5)';
-        
-        html += '<div style="display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); width: 100%; box-sizing: border-box; transition: background 0.2s, border-color 0.2s;">';
-        
-        html += '<div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #71717a; font-weight: 700; flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05);">' + stepNum + '</div>';
-        
-        // Icon
-        html += '<div style="width: 36px; height: 36px; border-radius: 10px; background: ' + iconBg + '; border: 1px solid ' + iconBorder + '; color: ' + iconColor + '; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);">';
-        html += getIcon(task.type);
-        html += '</div>';
-        
-        // Text
-        html += '<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">';
-        html += '<div style="font-size: 13px; font-weight: 600; color: #f4f4f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; letter-spacing: -0.01em;">' + title + '</div>';
-        html += '<div style="font-size: 11px; color: #a1a1aa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: \'Inter\', sans-serif; margin-top: 2px;">' + sub + '</div>';
-        html += '</div>';
-        
-        // Button
+        html += '<div id="cp-task-' + i + '" class="group relative rounded-2xl border transition-all duration-500 ';
         if (state.done) {
-            // Old completed style: bg-green-500/10 text-green-400
-            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.3); background: rgba(34,197,94,0.1); font-size: 12px; font-weight: 700; color: #4ade80; cursor: default; flex-shrink: 0;">Completed</button>';
-        } else if (state.started) {
-            // Old verifying style: bg-yellow-500/10 text-yellow-400
-            html += '<button style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(234,179,8,0.3); background: rgba(234,179,8,0.1); font-size: 12px; font-weight: 700; color: #facc15; cursor: wait; flex-shrink: 0;">Verifying...</button>';
+            html += 'border-green-500/30 bg-green-500/[0.03]';
         } else {
-            // The glorious old shiny gradient buttons
-            var btnStyle = "padding: 8px 16px; border-radius: 10px; border: " + btnBorder + "; background: " + btnDefaultBg + "; font-size: 12px; font-weight: 600; color: #ffffff; cursor: pointer; transition: all 0.2s ease-out; box-shadow: " + btnShadow + "; flex-shrink: 0; transform: translateY(0);";
-            var onOver = "this.style.background=\'" + btnHoverBg + "\'; this.style.transform=\'translateY(-2px)\';";
-            var onOut = "this.style.background=\'" + btnDefaultBg + "\'; this.style.transform=\'translateY(0)\';";
-            html += '<button onclick="startTask(' + i + ')" style="' + btnStyle + '" onmouseover="' + onOver + '" onmouseout="' + onOut + '">Verify</button>';
+            html += 'border-white/[0.06] bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]';
         }
+        html += '">';
+        html += '<div class="p-4 sm:p-5">';
+        html += '<div class="flex items-center gap-3 mb-4">';
+        html += '<div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 ';
+        if (state.done) {
+            html += 'bg-green-500/20 text-green-400 border border-green-500/30">';
+            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+        } else {
+            html += 'bg-white/[0.06] text-gray-500 border border-white/[0.08]">';
+            html += stepNum;
+        }
+        html += '</div>';
+        html += '<div class="flex-1 min-w-0">';
+        html += '<h4 class="text-sm sm:text-base font-semibold truncate ';
+        html += state.done ? 'text-green-400' : 'text-gray-200';
+        html += '">' + title + '</h4>';
+        html += '<p class="text-[11px] sm:text-xs text-gray-600 mt-0.5">';
+        html += sub;
+        html += '</p>';
+        html += '</div>';
+        if (state.done) {
+            html += '<span class="px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] sm:text-xs font-bold flex-shrink-0">DONE</span>';
+        } else if (state.started) {
+            html += '<span class="px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[10px] sm:text-xs font-bold flex-shrink-0 animate-pulse">VERIFYING</span>';
+        } else {
+            html += '<span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-600 text-[10px] sm:text-xs font-bold flex-shrink-0">PENDING</span>';
+        }
+        html += '</div>';
         
+        if (state.done) {
+            html += '<div class="w-full py-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-semibold flex items-center justify-center gap-2">';
+            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+            html += 'Completed';
+            html += '</div>';
+        } else if (state.started) {
+            html += '<div class="w-full py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-gray-500 text-sm font-semibold flex items-center justify-center gap-3 cursor-not-allowed">';
+            html += '<div class="cp-spinner"></div>';
+            html += 'Verifying... (Wait 20s)';
+            html += '</div>';
+        } else {
+            html += '<button onclick="startTask(' + i + ')" class="w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ';
+            if (task.type === "subscribe" || task.type === "like") {
+                html += 'from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40">';
+            } else if (task.type === "tiktok") {
+                html += 'from-slate-900 to-black hover:from-slate-800 hover:to-slate-900 text-white shadow-lg shadow-black/20 hover:shadow-black/40" >';
+            } else {
+                html += 'from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">';
+            }
+            html += getIcon(task.type);
+            html += title;
+            html += '</button>';
+        }
+        html += '</div>';
         html += '</div>';
     }
     container.innerHTML = html;
