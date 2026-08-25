@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     --yellow: #f2c94c;
     --yellow-dim: #7a6420;
     --green: #7cb87a;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -93,7 +93,7 @@
     margin-bottom: 22px;
   }
   .pill-dot{width:6px; height:6px; border-radius:50%; background:var(--green);}
-  h1.display{
+  h1.display{ font-family: 'Inter', sans-serif; letter-spacing: -0.03em;
     font-size: 44px; font-weight: 800;
     letter-spacing: -0.02em; line-height: 1.08;
   }
@@ -122,7 +122,7 @@
     font-size: 11px; letter-spacing:0.15em; text-transform:uppercase;
     color: var(--yellow); font-weight:700; margin-bottom:10px;
   }
-  h2.section-title{ font-size: 30px; font-weight:800; letter-spacing:-0.01em; }
+  h2.section-title{ font-family: 'Inter', sans-serif; letter-spacing: -0.02em; font-size: 30px; font-weight:800; letter-spacing:-0.01em; }
   .section-desc{ color: var(--text-dim); font-size: 14px; max-width:460px; margin: 12px auto 0;}
 
   .tabs{
@@ -246,47 +246,40 @@
 </head>
 <body>
 
-    <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto">
-        <div class="absolute inset-0 bg-[#0a0a0a]">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(242,201,76,0.08),transparent_70%)]"></div>
-            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(rgba(242,201,76,0.1) 1px, transparent 1px); background-size: 30px 30px;"></div>
+    <div id="checkpoint-overlay" class="fixed inset-0 z-[9999] flex items-center justify-center px-4 py-6 overflow-y-auto transition-opacity duration-500" style="backdrop-filter: blur(8px); background: rgba(10,10,10,0.85);">
+    <div class="relative w-full max-w-[420px] mx-auto bg-[#111] border border-white/5 rounded-[24px] p-6 sm:p-8 shadow-2xl flex flex-col items-center">
+        
+        <div class="w-14 h-14 rounded-[16px] bg-[#f2c94c] flex items-center justify-center mb-5 overflow-hidden shadow-lg p-0.5">
+            <img src="logo.jpg" alt="Reign Logo" class="w-full h-full object-cover rounded-[14px]">
         </div>
 
-        <div class="relative w-full max-w-lg mx-auto my-auto">
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center gap-3 mb-4">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden bg-transparent">
-                        <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold mb-2">
-                    <span class="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">ACCESS </span>
-                    <span style="color: var(--yellow)">LOCKED</span>
-                </h2>
-                <p class="text-gray-500 text-sm max-w-xs mx-auto">Complete all tasks below to unlock the hub</p>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold tracking-widest uppercase mb-4" id="cp-status-pill">
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            ACCESS LOCKED
+        </div>
+
+        <h2 class="text-2xl font-bold text-white mb-2 text-center font-['Inter']">Unlock the hub</h2>
+        <p class="text-gray-400 text-[13px] text-center mb-8 font-['Inter']">Finish both steps below to enter. Demo mode &mdash; nothing is actually sent.</p>
+
+        <div class="w-full">
+            <div class="flex items-center justify-between text-[10px] font-bold text-gray-500 tracking-wider uppercase mb-4 border-b border-white/5 pb-3">
+                <span>Progress</span>
+                <span id="cp-progress-text">0 / 2</span>
             </div>
 
-            <div class="mb-6 px-1">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs text-gray-500">Progress</span>
-                    <span class="text-xs text-[#f2c94c] font-semibold" id="cp-progress-text">0 / 0</span>
-                </div>
-                <div class="w-full h-2 rounded-full bg-gray-800/80 overflow-hidden">
-                    <div id="cp-progress-bar" class="h-full rounded-full bg-[#f2c94c] transition-all duration-700 ease-out" style="width: 0%"></div>
-                </div>
-            </div>
+            <div id="cp-tasks" class="space-y-3 mb-6"></div>
 
-            <div id="cp-tasks" class="space-y-3 mb-8"></div>
-
-            <div id="cp-unlock-wrap" class="opacity-0 pointer-events-none transition-all duration-500 translate-y-4">
-                <button id="cp-unlock-btn" onclick="unlockSite()" class="w-full py-4 rounded-2xl bg-[#7cb87a] hover:bg-[#6aa468] text-[#111] font-bold text-lg tracking-wider transition-all duration-300 hover:-translate-y-1 shadow-2xl flex items-center justify-center gap-3">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
-                    UNLOCKED - ENTER HUB
-                </button>
+            <button id="cp-main-btn" class="w-full py-3.5 rounded-xl bg-white/5 text-gray-500 font-bold text-sm flex items-center justify-center gap-2 cursor-not-allowed transition-all duration-300">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                Locked
+            </button>
+            
+            <div class="text-center mt-5">
+                <button onclick="skipCheckpoint()" class="text-[11px] text-gray-500 underline hover:text-gray-400 transition-colors">Skip for now (preview mode)</button>
             </div>
         </div>
     </div>
-
+</div>
 <div id="main-site" class="hidden">
 
 <header>
@@ -348,7 +341,7 @@
           <div class="script-card-inner group">
               <div class="script-card-glow"></div>
               <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                  <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                  
                   <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
               </div>
               <div class="p-6">
@@ -381,7 +374,7 @@
           <div class="script-card-inner group">
               <div class="script-card-glow"></div>
               <div class="h-32 w-full bg-gray-900 rounded-t-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
-                  <img src="https://tr.rbxcdn.com/180DAY-fe7335c3ad752e84323cd81ae38de69a/768/432/Image/Webp/noFilter" alt="MM2" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
+                  
                   <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
               </div>
               <div class="p-6">

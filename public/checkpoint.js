@@ -32,65 +32,31 @@ function renderTasks() {
         var task = CHECKPOINT_TASKS[i];
         var state = taskState[i];
         var stepNum = i + 1;
-        html += '<div id="cp-task-' + i + '" class="group relative rounded-2xl border transition-all duration-500 ';
-        if (state.done) {
-            html += "border-green-500/30 bg-green-500/[0.03]";
-        } else {
-            html += "border-white/[0.06] bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]";
-        }
-        html += '">';
-        html += '<div class="p-4 sm:p-5">';
-        html += '<div class="flex items-center gap-3 mb-4">';
-        html += "<div class=\"w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold  flex-shrink-0 ";
-        if (state.done) {
-            html += 'bg-green-500/20 text-green-400 border border-green-500/30">';
-            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
-        } else {
-            html += 'bg-white/[0.06] text-gray-500 border border-white/[0.08]">';
-            html += stepNum;
-        }
-        html += "</div>";
+        
+        html += '<div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">';
+        html += '<div class="w-6 h-6 rounded bg-black/50 flex items-center justify-center text-[10px] text-gray-500 font-bold flex-shrink-0">' + stepNum + '</div>';
+        
+        // Icon
+        html += '<div class="w-8 h-8 rounded-lg bg-[#f2c94c]/10 text-[#f2c94c] flex items-center justify-center flex-shrink-0">';
+        html += getIcon(task.type);
+        html += '</div>';
+        
+        // Text
         html += '<div class="flex-1 min-w-0">';
-        html += "<h4 class=\"text-sm sm:text-base font-semibold  truncate ";
-        html += state.done ? "text-green-400" : "text-gray-200";
-        html += '">' + task.label + "</h4>";
-        html += "<p class=\"text-[11px] sm:text-xs text-gray-600  mt-0.5\">";
-        html += task.type === "subscribe" ? "YouTube Channel" : (task.type === "tiktok" ? "TikTok Account" : "Link");
-        html += "</p>";
-        html += "</div>";
+        html += '<div class="text-[13px] font-bold text-gray-200 truncate">' + task.label + '</div>';
+        html += '<div class="text-[11px] text-gray-500 truncate">' + (task.type === 'subscribe' ? 'Reign Scripts channel' : '@reignscripts') + '</div>';
+        html += '</div>';
+        
+        // Button
         if (state.done) {
-            html += '<span class="px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] sm:text-xs font-bold flex-shrink-0">DONE</span>';
+            html += '<button class="px-4 py-1.5 rounded-lg border border-green-500/30 bg-green-500/10 text-[11px] font-bold text-green-400 cursor-default">Done</button>';
         } else if (state.started) {
-            html += '<span class="px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-[10px] sm:text-xs font-bold flex-shrink-0 animate-pulse">VERIFYING</span>';
+            html += '<button class="px-4 py-1.5 rounded-lg border border-white/10 bg-white/5 text-[11px] font-bold text-gray-400 cursor-wait">...</button>';
         } else {
-            html += '<span class="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-600 text-[10px] sm:text-xs font-bold flex-shrink-0">PENDING</span>';
+            html += '<button onclick="startTask(' + i + ')" class="px-4 py-1.5 rounded-lg border border-white/10 bg-[#262626] hover:bg-[#333] text-[11px] font-bold text-gray-300 transition-colors">Verify</button>';
         }
-        html += "</div>";
-        if (state.done) {
-            html += "<div class=\"w-full py-3 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-semibold  flex items-center justify-center gap-2\">";
-            html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
-            html += "Completed";
-            html += "</div>";
-        } else if (state.started) {
-            html += "<div class=\"w-full py-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-gray-500 text-sm font-semibold  flex items-center justify-center gap-3 cursor-not-allowed\">";
-            html += '<div class="cp-spinner"></div>';
-            html += "Verifying...";
-            html += "</div>";
-        } else {
-            html += '<button onclick="startTask(' + i + ")\" class=\"w-full py-3 rounded-xl bg-gradient-to-r text-sm font-semibold  flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ";
-            if (task.type === "subscribe" || task.type === "like") {
-                html += 'from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 hover:shadow-red-500/40">';
-            } else if (task.type === "tiktok") {
-                html += 'from-slate-900 to-black hover:from-slate-800 hover:to-slate-900 text-white shadow-lg shadow-black/20 hover:shadow-black/40" >';
-            } else {
-                html += 'from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">';
-            }
-            html += getIcon(task.type);
-            html += task.label;
-            html += "</button>";
-        }
-        html += "</div>";
-        html += "</div>";
+        
+        html += '</div>';
     }
     container.innerHTML = html;
     updateProgress();
@@ -116,7 +82,7 @@ function updateProgress() {
     var total = CHECKPOINT_TASKS.length;
     var pct = total > 0 ? Math.round(done / total * 100) : 0;
     document.getElementById("cp-progress-text").textContent = done + " / " + total;
-    document.getElementById("cp-progress-bar").style.width = pct + "%";
+    var pb = document.getElementById("cp-progress-bar"); if(pb) pb.style.width = pct + "%";
 }
 
 function checkAllDone() {
@@ -128,9 +94,17 @@ function checkAllDone() {
         }
     }
     if (allDone) {
-        var wrap = document.getElementById("cp-unlock-wrap");
-        wrap.classList.remove("opacity-0", "pointer-events-none", "translate-y-4");
-        wrap.classList.add("opacity-100", "translate-y-0");
+        var btn = document.getElementById("cp-main-btn");
+        if (btn) {
+            btn.className = "w-full py-3.5 rounded-xl bg-[#f2c94c] hover:bg-[#f5d370] text-[#111] font-bold text-sm flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-lg shadow-yellow-500/20";
+            btn.innerHTML = "Unlock Hub";
+            btn.onclick = unlockSite;
+        }
+        var pill = document.getElementById("cp-status-pill");
+        if (pill) {
+            pill.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-500 text-[10px] font-bold tracking-widest uppercase mb-4";
+            pill.innerHTML = '<svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> ACCESS GRANTED';
+        }
     }
 }
 
@@ -164,3 +138,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // CodeRabbit trigger
+
+
+window.isPreviewMode = false;
+
+function skipCheckpoint() {
+    window.isPreviewMode = true;
+    document.getElementById("checkpoint-overlay").classList.add("opacity-0", "pointer-events-none");
+    setTimeout(function() {
+        document.getElementById("checkpoint-overlay").classList.add("hidden");
+        document.getElementById("main-site").classList.remove("hidden");
+        document.body.style.overflow = "auto";
+    }, 500);
+}
+
+function enforceCheckpoint(e) {
+    if (window.isPreviewMode) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Show checkpoint again
+        document.getElementById("checkpoint-overlay").classList.remove("hidden");
+        // tiny delay to allow display:block to apply before animating opacity
+        setTimeout(function() {
+            document.getElementById("checkpoint-overlay").classList.remove("opacity-0", "pointer-events-none");
+            document.body.style.overflow = "hidden";
+        }, 10);
+        return false;
+    }
+}

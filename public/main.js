@@ -130,3 +130,20 @@
 
     sections.forEach(sec => navObserver.observe(sec));
 });
+
+
+// Intercept all clicks in preview mode
+document.addEventListener('click', function(e) {
+    // If they click any button, link, or script card while in preview mode
+    if (window.isPreviewMode) {
+        const target = e.target.closest('a, button, .script-card-inner, .copy-btn');
+        if (target) {
+            // Don't intercept clicks that are actually inside the checkpoint itself
+            if (!target.closest('#checkpoint-overlay')) {
+                if (typeof enforceCheckpoint === 'function') {
+                    enforceCheckpoint(e);
+                }
+            }
+        }
+    }
+}, true); // use capture phase to intercept early
