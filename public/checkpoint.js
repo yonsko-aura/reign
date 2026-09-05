@@ -1,4 +1,4 @@
-const CHECKPOINT_TASKS = [
+﻿const CHECKPOINT_TASKS = [
     {
         type: 'subscribe',
         label: 'Subscribe on YouTube',
@@ -167,18 +167,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 window.isPreviewMode = false;
 
-window.skipCheckpoint = function() {
-    window.isPreviewMode = true;
-    var overlay = document.getElementById("checkpoint-overlay");
-    if (overlay) {
-        overlay.style.transition = "opacity 0.6s ease";
-        overlay.style.opacity = "0";
-        setTimeout(function() {
-            overlay.style.display = "none";
-            document.body.style.overflow = "";
-        }, 600);
-    }
-};
 
 window.enforceCheckpoint = function(e) {
     if (window.isPreviewMode) {
